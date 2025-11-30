@@ -15,7 +15,9 @@ public class RegionEvents {
         Region result = null;
         
         for (Region region : RegionManager.getRegions(level).values()) {
-            if (region.contains(pos) && (result == null || result.priority() < region.priority())) {
+            if (!region.contains(pos)) continue;
+            
+            if (result == null || result.getPriority() < region.getPriority()) {
                 result = region;
             }
         }
