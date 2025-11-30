@@ -1,5 +1,6 @@
 package dev.tonimatas.fastregions.region;
 
 public enum RegionFlag {
-    CAN_BREAK_BLOCK
+    BREAK_BLOCKS,
+    PLACE_BLOCKS
 }
