@@ -13,28 +13,13 @@ import java.util.Map;
 
 public class RegionManager {
     private static final Map<String, Map<String, Region>> regions = new HashMap<>();
-    
-    public static boolean cancelEvent(Player player, Level level, BlockPos pos, RegionFlag flag) {
-        if (level.isClientSide()) return false;
-         
-        if (player != null) {
-            // TODO: Do permission check
-        }
-        
-        for (Region region : getRegions(level).values()) {
-            if (region.contains(pos) && region.has(flag)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
 
     public static void loadRegions(MinecraftServer server) {
         server.getAllLevels().forEach(level -> {
             regions.putIfAbsent(LevelUtils.getName(level), new HashMap<>());
             FastRegionsCommon.LOGGER.info(LevelUtils.getName(level));
         });
+        // TODO: Load regions
         FastRegionsCommon.LOGGER.info("Loaded {} regions", 1);
     }
     
