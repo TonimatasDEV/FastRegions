@@ -3,7 +3,7 @@ package dev.tonimatas.fastregions.region;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.tonimatas.fastregions.FastRegionsCommon;
+import dev.tonimatas.fastregions.FastRegions;
 import dev.tonimatas.fastregions.util.LevelUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -22,10 +22,10 @@ public class RegionManager {
     public static void loadRegions(MinecraftServer server) {
         server.getAllLevels().forEach(level -> {
             regions.putIfAbsent(LevelUtils.getName(level), new HashMap<>());
-            FastRegionsCommon.LOGGER.info(LevelUtils.getName(level));
+            FastRegions.LOGGER.info(LevelUtils.getName(level));
         });
         // TODO: Load regions
-        FastRegionsCommon.LOGGER.info("Loaded {} regions", 1);
+        FastRegions.LOGGER.info("Loaded {} regions", 1);
     }
     
     public static void saveRegions() {

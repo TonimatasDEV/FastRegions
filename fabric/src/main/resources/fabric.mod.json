@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.tonimatas.fastregions.FastRegions"
+      "dev.tonimatas.fastregions.FastRegionsFabric"
     ]
   },
   "mixins": [

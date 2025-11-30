@@ -1,7 +1,7 @@
 package dev.tonimatas.fastregions.platform;
 
 import dev.tonimatas.fastregions.platform.services.IPlatformHelper;
-import dev.tonimatas.fastregions.FastRegionsCommon;
+import dev.tonimatas.fastregions.FastRegions;
 
 import java.util.ServiceLoader;
 
@@ -10,7 +10,7 @@ public class Services {
 
     public static <T> T load(Class<T> clazz) {
         final T loadedService = ServiceLoader.load(clazz).findFirst().orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
-        FastRegionsCommon.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
+        FastRegions.LOGGER.debug("Loaded {} for service {}", loadedService, clazz);
         return loadedService;
     }
 }

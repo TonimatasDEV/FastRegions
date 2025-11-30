@@ -2,10 +2,10 @@ package dev.tonimatas.fastregions;
 
 import net.fabricmc.api.ModInitializer;
 
-public class FastRegions implements ModInitializer {
+public class FastRegionsFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        FastRegionsCommon.init();
+        FastRegions.init();
     }
 }
