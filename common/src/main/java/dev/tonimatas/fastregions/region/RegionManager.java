@@ -29,6 +29,6 @@ public class RegionManager {
     }
     
     public static Collection<Region> getRegions(LevelAccessor level) {
-        return regions.get(((WorldData) level.getLevelData()).getLevelName()).values();
+        return regions.getOrDefault(((WorldData) level.getLevelData()).getLevelName(), Map.of()).values();
     }
 }
