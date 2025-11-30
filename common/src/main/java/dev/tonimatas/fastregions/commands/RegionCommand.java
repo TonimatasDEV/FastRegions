@@ -82,10 +82,9 @@ public class RegionCommand {
             int minZ = Math.min(pos1.getZ(), pos2.getZ());
             int maxZ = Math.max(pos1.getZ(), pos2.getZ());
             
-            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), List.of(RegionFlag.CAN_BREAK_BLOCK));
+            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), List.of(), 0);
             
             if (RegionManager.addRegion(player.level(), name, region)) {
-
                 POS1.remove(player.getName().getString());
                 POS2.remove(player.getName().getString());
                 source.sendSuccess(() -> Component.translatable("key.fastregions.create.success", name, LevelUtils.getName(player.level())), true);
@@ -115,4 +114,5 @@ public class RegionCommand {
     }*/
     
     // TODO: Region flags
+    // TODO: Region priority
 }
