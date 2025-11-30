@@ -11,6 +11,6 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 public class RegionFlagEvents {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        event.setCanceled(RegionEvents.cancelBlockEvent(event.getPlayer(), event.getPlayer().level(), event.getPos(), RegionFlag.BREAK_BLOCKS));
+        event.setCanceled(RegionEvents.cancelBlockEvent(event.getPlayer(), event.getPlayer().level(), event.getPos(), RegionFlag.DENY_BLOCK_BREAK));
     }
 }
