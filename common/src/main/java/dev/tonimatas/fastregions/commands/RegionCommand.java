@@ -1,10 +1,10 @@
 package dev.tonimatas.fastregions.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.tonimatas.fastregions.region.Region;
-import dev.tonimatas.fastregions.region.RegionFlag;
 import dev.tonimatas.fastregions.region.RegionManager;
 import dev.tonimatas.fastregions.util.LevelUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -24,10 +24,19 @@ public class RegionCommand {
     
     public RegionCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("region")
-                .then(Commands.literal("create").then(Commands.argument("name", StringArgumentType.word()).executes(this::regionCreate)))
+                .then(Commands.literal("create")
+                        .then(Commands.argument("name", StringArgumentType.word())
+                                .executes(this::regionCreate)))
                 //.then(Commands.literal("expandvert").executes((this::regionExpandVert))) TODO
-                .then(Commands.literal("pos1").executes((this::regionPos1)))
-                .then(Commands.literal("pos2").executes((this::regionPos2)))
+                .then(Commands.literal("pos1")
+                        .executes((this::regionPos1)))
+                .then(Commands.literal("pos2")
+                        .executes((this::regionPos2)))
+                .then(Commands.literal("priority")
+                        .then(Commands.argument("region", StringArgumentType.word())
+                                .suggests(RegionManager::getCommandRegionSuggestions)
+                                .then(Commands.argument("value", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
+                                        .executes(this::regionPriority))))
         );
     }
 
@@ -82,17 +91,44 @@ public class RegionCommand {
             int minZ = Math.min(pos1.getZ(), pos2.getZ());
             int maxZ = Math.max(pos1.getZ(), pos2.getZ());
             
-            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), List.of(), 0);
+            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), List.of());
             
             if (RegionManager.addRegion(player.level(), name, region)) {
                 POS1.remove(player.getName().getString());
                 POS2.remove(player.getName().getString());
+                RegionManager.saveRegions();
                 source.sendSuccess(() -> Component.translatable("key.fastregions.create.success", name, LevelUtils.getName(player.level())), true);
                 return 1;
             } else {
                 source.sendFailure(Component.translatable("key.fastregions.create.error.used_name"));
                 return -1;
             }
+        } else {
+            source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
+            return -1;
+        }
+    }
+
+    private int regionPriority(CommandContext<CommandSourceStack> context) {CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
+        String regionName = context.getArgument("region", String.class);
+        int value = context.getArgument("value", Integer.class);
+
+        if (player != null) {
+            Region region = RegionManager.getRegion(player.level(), regionName);
+            
+            if (region == null) {
+                source.sendFailure(Component.translatable("key.fastregions.priority.error.unknown_region", regionName));
+                return -1;
+            }
+
+            int oldValue = region.getPriority();
+
+            region.setPriority(value);
+            RegionManager.saveRegions();
+            source.sendSuccess(() -> Component.translatable("key.fastregions.priority.success", regionName, oldValue, value), true);
+            
+            return 1;
         } else {
             source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
             return -1;
