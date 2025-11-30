@@ -1,9 +1,9 @@
 package dev.tonimatas.fastregions.region;
 
+import dev.tonimatas.fastregions.util.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.storage.WorldData;
+import net.minecraft.world.level.Level;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 public class RegionManager {
     public static Map<String, Map<String, Region>> regions = new HashMap<>();
     
-    public static boolean cancelEvent(Player player, LevelAccessor level, BlockPos pos, RegionFlag flag) {
+    public static boolean cancelEvent(Player player, Level level, BlockPos pos, RegionFlag flag) {
         if (level.isClientSide()) return false;
          
         if (player != null) {
@@ -28,7 +28,7 @@ public class RegionManager {
         return false;
     }
     
-    public static Collection<Region> getRegions(LevelAccessor level) {
-        return regions.getOrDefault(((WorldData) level.getLevelData()).getLevelName(), Map.of()).values();
+    public static Collection<Region> getRegions(Level level) {
+        return regions.getOrDefault(LevelUtils.getName(level), Map.of()).values();
     }
 }
