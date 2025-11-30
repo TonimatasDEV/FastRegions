@@ -1,0 +1,7 @@
+{
+  "key.fastregions.pos.success": "Position %d assigned to X: %d Y: %d Z: %d",
+  "key.fastregions.error.players_only": "Only players can use this command",
+  "key.fastregions.create.error.missing": "First you need to select the region with /region pos1 and /region pos2.",
+  "key.fastregions.create.success": "Region %s in the world %s created successfully.",
+  "key.fastregions.create.error.used_name": "The name %s is already used, please use another name."
+}
