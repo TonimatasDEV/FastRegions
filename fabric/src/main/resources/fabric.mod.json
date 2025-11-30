@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "fastregions",
+  "version": "${modVersion}",
+  "name": "FastRegions",
+  "description": "With this mod you can create protected regions in your world.",
+  "authors": [
+    "TonimatasDEV"
+  ],
+  "contact": {
+    "homepage": "https://github.com/TonimatasDEV/FastRegions",
+    "sources": "https://github.com/TonimatasDEV/FastRegions",
+    "issues": "https://github.com/TonimatasDEV/FastRegions/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.tonimatas.fastregions.FastRegions"
+    ]
+  },
+  "mixins": [
+    "fastregions.mixins.json",
+    "fastregions.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabric-api": "*",
+    "minecraft": "${minecraftVersion}"
+  }
+}
