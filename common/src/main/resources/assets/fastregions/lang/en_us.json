@@ -10,5 +10,6 @@
   "key.fastregions.flags.add.success": "Flag %s has been added to %s.",
   "key.fastregions.flags.add.error": "The region %s already have the flag %s.",
   "key.fastregions.flags.remove.success": "Flag %s has been removed from %s.",
-  "key.fastregions.flags.remove.error": "The region %s doesn't have the flag %s."
+  "key.fastregions.flags.remove.error": "The region %s doesn't have the flag %s.",
+  "key.fastregions.remove.success": "Region %d has been removed."
 }

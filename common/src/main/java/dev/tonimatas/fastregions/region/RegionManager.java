@@ -44,6 +44,10 @@ public class RegionManager {
         return true;
     }
     
+    public static void removeRegion(Level level, String name) {
+        regions.get(LevelUtils.getName(level)).remove(name);
+    }
+    
     public static Map<String, Region> getRegions(Level level) {
         return regions.getOrDefault(LevelUtils.getName(level), Map.of());
     }
