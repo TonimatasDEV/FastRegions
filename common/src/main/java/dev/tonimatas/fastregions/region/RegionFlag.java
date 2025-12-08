@@ -11,17 +11,26 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public enum RegionFlag {
-    BLOCK_BREAK(true),
-    BLOCK_INTERACT(true);
+    BLOCK_BREAK(AllowedList.Type.BLOCKS),
+    BLOCK_INTERACT(AllowedList.Type.BLOCKS), // TODO
+    INVINCIBLE; // TODO
 
-    private final boolean hasAllowedList;
+    private final AllowedList.Type allowedListType;
     
-    RegionFlag(boolean hasAllowedList) {
-        this.hasAllowedList = hasAllowedList;
+    RegionFlag() {
+        this(AllowedList.Type.NONE);
+    }
+    
+    RegionFlag(AllowedList.Type allowedListType) {
+        this.allowedListType = allowedListType;
     }
 
     public boolean hasAllowedList() {
-        return this.hasAllowedList;
+        return AllowedList.Type.NONE != this.allowedListType;
+    }
+    
+    public AllowedList.Type allowedListType() {
+        return this.allowedListType;
     }
 
     public static CompletableFuture<Suggestions> getCommandFlagsSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {

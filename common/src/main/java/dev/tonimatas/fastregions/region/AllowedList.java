@@ -19,4 +19,10 @@ public record AllowedList(List<String> allowed) {
     public static AllowedList empty() {
         return new AllowedList(new ArrayList<>());
     }
+    
+    public enum Type {
+        BLOCKS,
+        ENTITIES,
+        NONE
+    }
 }
