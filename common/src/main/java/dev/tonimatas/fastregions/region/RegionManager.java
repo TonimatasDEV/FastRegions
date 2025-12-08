@@ -7,6 +7,7 @@ import dev.tonimatas.fastregions.FastRegions;
 import dev.tonimatas.fastregions.util.LevelUtils;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -52,5 +53,20 @@ public class RegionManager {
         if (player == null) return builder.buildFuture();
         String[] regionNameList = regions.get(LevelUtils.getName(player.level())).keySet().toArray(new String[0]);
         return SharedSuggestionProvider.suggest(regionNameList, builder);
+    }
+    
+    @Nullable
+    public static Region getRegion(Level level, BlockPos pos) {
+        Region result = null;
+
+        for (Region region : RegionManager.getRegions(level).values()) {
+            if (!region.contains(pos)) continue;
+
+            if (result == null || result.getPriority() < region.getPriority()) {
+                result = region;
+            }
+        }
+        
+        return result;
     }
 }

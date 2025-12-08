@@ -12,16 +12,7 @@ public class RegionEvents {
             // TODO: Do permission check
         }
 
-        Region result = null;
-        
-        for (Region region : RegionManager.getRegions(level).values()) {
-            if (!region.contains(pos)) continue;
-            
-            if (result == null || result.getPriority() < region.getPriority()) {
-                result = region;
-            }
-        }
-
+        Region result = RegionManager.getRegion(level, pos);
         return result != null && result.has(flag);
     }
 }
