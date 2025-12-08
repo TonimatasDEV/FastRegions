@@ -1,5 +1,16 @@
 package dev.tonimatas.fastregions.region;
 
 public enum RegionFlag {
-    DENY_BLOCK_BREAK
+    BLOCK_BREAK(true),
+    BLOCK_INTERACT(true);
+
+    private final boolean hasAllowedList;
+    
+    RegionFlag(boolean hasAllowedList) {
+        this.hasAllowedList = hasAllowedList;
+    }
+
+    public boolean hasAllowedList() {
+        return this.hasAllowedList;
+    }
 }
