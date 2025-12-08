@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class RegionCommand {
     private static final Map<String, BlockPos> POS1 = new HashMap<>();
     private static final Map<String, BlockPos> POS2 = new HashMap<>();
-    
+
     public RegionCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("region")
                 .then(Commands.literal("create")
@@ -40,27 +41,30 @@ public class RegionCommand {
                                 .then(Commands.argument("value", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
                                         .executes(this::regionPriority))))
                 .then(Commands.literal("flags")
-                        .then(Commands.literal("add")
-                                .then(Commands.argument("flag", StringArgumentType.word())
-                                        .suggests(RegionFlag::getCommandFlagsSuggestions)
-                                        .executes(null)) // TODO
-                        .then(Commands.literal("remove")
-                                .then(Commands.argument("flag", StringArgumentType.word())
-                                        .suggests(RegionFlag::getCommandFlagsSuggestions)
-                                        .executes(null))) // TODO
-                        .then(Commands.literal("allow-list")
-                                .then(Commands.argument("flag", StringArgumentType.word())
-                                        .suggests(RegionFlag::getCommandFlagsSuggestions)
-                                        .then(Commands.literal("add")
-                                                .then(Commands.argument("id", StringArgumentType.word())
-                                                        .suggests(null) // TODO
-                                                        .executes(null))) // TODO
-                                        .then(Commands.literal("remove")
-                                                .then(Commands.argument("id", StringArgumentType.word())
-                                                        .suggests(null) // TODO
-                                                        .executes(null))) // TODO)
+                        .then(Commands.argument("region", StringArgumentType.word())
+                                .suggests(RegionManager::getCommandRegionSuggestions)
+                                .then(Commands.literal("add")
+                                        .then(Commands.argument("flag", StringArgumentType.word())
+                                                .suggests(RegionFlag::getCommandFlagsSuggestions)
+                                                .executes(this::addRegionFlag)))
+                                .then(Commands.literal("remove")
+                                        .then(Commands.argument("flag", StringArgumentType.word())
+                                                .suggests(RegionFlag::getCommandFlagsSuggestions)
+                                                .executes(this::removeRegionFlag)))
+                                .then(Commands.literal("allow-list")
+                                        .then(Commands.argument("flag", StringArgumentType.word())
+                                                .suggests(RegionFlag::getCommandFlagsSuggestions)
+                                                .then(Commands.literal("add")
+                                                        .then(Commands.argument("id", StringArgumentType.word())
+                                                                .suggests(null) // TODO
+                                                                .executes(null))) // TODO
+                                                .then(Commands.literal("remove")
+                                                        .then(Commands.argument("id", StringArgumentType.word())
+                                                                .suggests(null) // TODO
+                                                                .executes(null))) // TODO)
+                                        )
                                 )
-                        ))
+                        )
                 )
         );
     }
@@ -99,7 +103,7 @@ public class RegionCommand {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();
         String name = context.getArgument("name", String.class);
-        
+
         if (player != null) {
             BlockPos pos1 = POS1.get(player.getName().getString());
             BlockPos pos2 = POS2.get(player.getName().getString());
@@ -108,16 +112,16 @@ public class RegionCommand {
                 source.sendFailure(Component.translatable("key.fastregions.create.error.missing"));
                 return -1;
             }
-            
+
             int minX = Math.min(pos1.getX(), pos2.getX());
             int maxX = Math.max(pos1.getX(), pos2.getX());
             int minY = Math.min(pos1.getY(), pos2.getY());
             int maxY = Math.max(pos1.getY(), pos2.getY());
             int minZ = Math.min(pos1.getZ(), pos2.getZ());
             int maxZ = Math.max(pos1.getZ(), pos2.getZ());
-            
-            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), List.of());
-            
+
+            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), new ArrayList<>());
+
             if (RegionManager.addRegion(player.level(), name, region)) {
                 POS1.remove(player.getName().getString());
                 POS2.remove(player.getName().getString());
@@ -134,16 +138,17 @@ public class RegionCommand {
         }
     }
 
-    private int regionPriority(CommandContext<CommandSourceStack> context) {CommandSourceStack source = context.getSource();
+    private int regionPriority(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();
         String regionName = context.getArgument("region", String.class);
         int value = context.getArgument("value", Integer.class);
 
         if (player != null) {
             Region region = RegionManager.getRegion(player.level(), regionName);
-            
+
             if (region == null) {
-                source.sendFailure(Component.translatable("key.fastregions.priority.error.unknown_region", regionName));
+                source.sendFailure(Component.translatable("key.fastregions.error.unknown_region", regionName));
                 return -1;
             }
 
@@ -152,7 +157,7 @@ public class RegionCommand {
             region.setPriority(value);
             RegionManager.saveRegions();
             source.sendSuccess(() -> Component.translatable("key.fastregions.priority.success", regionName, oldValue, value), true);
-            
+
             return 1;
         } else {
             source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
@@ -168,7 +173,7 @@ public class RegionCommand {
         if (player != null) {
             BlockPos pos1 = POS1.get(player.getName().getString());
             BlockPos pos2 = POS2.get(player.getName().getString());
-            
+
             if (pos1 == null || pos2 == null) {
                 source.sendFailure(Component.translatable("key.fastregions.create.error.missing"));
                 return -1;
@@ -176,10 +181,10 @@ public class RegionCommand {
 
             BlockPos maxY = pos1.atY(level.getMaxBuildHeight());
             BlockPos minY = pos2.atY(level.getMinBuildHeight());
-            
+
             POS1.put(player.getName().getString(), maxY);
             POS2.put(player.getName().getString(), minY);
-            
+
             source.sendSuccess(() -> Component.translatable("key.fastregions.expand_vert.success", minY.getY(), maxY.getY()), false);
             return 1;
         } else {
@@ -187,6 +192,66 @@ public class RegionCommand {
             return -1;
         }
     }
+    
+    public int addRegionFlag(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
+        ServerLevel level = source.getLevel();
+        String regionName = context.getArgument("region", String.class);
+        String flagName = context.getArgument("flag", String.class);
+        Region region = RegionManager.getRegion(level, regionName);
 
-    // TODO: Region flags
+        if (player != null) {
+            if (region != null) {
+                RegionFlag flag = RegionFlag.valueOf(flagName);
+
+                if (!region.has(flag)) {
+                    region.addFlag(flag);
+                    source.sendSuccess(() -> Component.translatable("key.fastregions.flags.add.success", flagName, regionName), false);
+                    return 1;
+                } else {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.add.error", regionName, flagName));
+                    return -1;
+                }
+            } else {
+                source.sendFailure(Component.translatable("key.fastregions.error.unknown_region", regionName));
+                return -1;
+            }
+        } else {
+            source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
+            return -1;
+        }
+    }
+    
+    public int removeRegionFlag(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
+        ServerLevel level = source.getLevel();
+        String regionName = context.getArgument("region", String.class);
+        String flagName = context.getArgument("flag", String.class);
+        Region region = RegionManager.getRegion(level, regionName);
+
+        if (player != null) {
+            if (region != null) {
+                RegionFlag flag = RegionFlag.valueOf(flagName);
+                
+                if (region.has(flag)) {
+                    region.removeFlag(flag);
+                    source.sendSuccess(() -> Component.translatable("key.fastregions.flags.remove.success", flagName, regionName), false);
+                    return 1;
+                } else {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.remove.error", regionName, flagName));
+                    return -1;
+                }
+            } else {
+                source.sendFailure(Component.translatable("key.fastregions.error.unknown_region", regionName));
+                return -1;
+            }
+        } else {
+            source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
+            return -1;
+        }
+    }
+
+    // TODO: Region flags allowed-lists
 }
