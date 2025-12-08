@@ -12,6 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
@@ -28,7 +29,7 @@ public class RegionCommand {
                 .then(Commands.literal("create")
                         .then(Commands.argument("name", StringArgumentType.word())
                                 .executes(this::regionCreate)))
-                //.then(Commands.literal("expandvert").executes((this::regionExpandVert))) TODO
+                .then(Commands.literal("expand-vert").executes((this::regionExpandVert)))
                 .then(Commands.literal("pos1")
                         .executes((this::regionPos1)))
                 .then(Commands.literal("pos2")
@@ -159,20 +160,33 @@ public class RegionCommand {
         }
     }
 
-    /* TODO: Region expand vert
     private int regionExpandVert(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();
+        ServerLevel level = source.getLevel();
 
         if (player != null) {
-            player.sendSystemMessage(Component.literal("Expand vert"));
+            BlockPos pos1 = POS1.get(player.getName().getString());
+            BlockPos pos2 = POS2.get(player.getName().getString());
+            
+            if (pos1 == null || pos2 == null) {
+                source.sendFailure(Component.translatable("key.fastregions.create.error.missing"));
+                return -1;
+            }
+
+            BlockPos maxY = pos1.atY(level.getMaxBuildHeight());
+            BlockPos minY = pos2.atY(level.getMinBuildHeight());
+            
+            POS1.put(player.getName().getString(), maxY);
+            POS2.put(player.getName().getString(), minY);
+            
+            source.sendSuccess(() -> Component.translatable("key.fastregions.expand_vert.success", minY.getY(), maxY.getY()), false);
             return 1;
         } else {
             source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
             return -1;
         }
-    }*/
-    
+    }
+
     // TODO: Region flags
-    // TODO: Region priority
 }
