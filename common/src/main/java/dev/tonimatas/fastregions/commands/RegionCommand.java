@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import dev.tonimatas.fastregions.region.Region;
+import dev.tonimatas.fastregions.region.RegionFlag;
 import dev.tonimatas.fastregions.region.RegionManager;
 import dev.tonimatas.fastregions.util.LevelUtils;
 import net.minecraft.commands.CommandSourceStack;
@@ -37,6 +38,29 @@ public class RegionCommand {
                                 .suggests(RegionManager::getCommandRegionSuggestions)
                                 .then(Commands.argument("value", IntegerArgumentType.integer(1, Integer.MAX_VALUE))
                                         .executes(this::regionPriority))))
+                .then(Commands.literal("flags")
+                        .then(Commands.literal("add")
+                                .then(Commands.argument("flag", StringArgumentType.word())
+                                        .suggests(RegionFlag::getCommandFlagsSuggestions)
+                                        .executes(null)) // TODO
+                        .then(Commands.literal("remove")
+                                .then(Commands.argument("flag", StringArgumentType.word())
+                                        .suggests(RegionFlag::getCommandFlagsSuggestions)
+                                        .executes(null))) // TODO
+                        .then(Commands.literal("allow-list")
+                                .then(Commands.argument("flag", StringArgumentType.word())
+                                        .suggests(RegionFlag::getCommandFlagsSuggestions)
+                                        .then(Commands.literal("add")
+                                                .then(Commands.argument("id", StringArgumentType.word())
+                                                        .suggests(null) // TODO
+                                                        .executes(null))) // TODO
+                                        .then(Commands.literal("remove")
+                                                .then(Commands.argument("id", StringArgumentType.word())
+                                                        .suggests(null) // TODO
+                                                        .executes(null))) // TODO)
+                                )
+                        ))
+                )
         );
     }
 
