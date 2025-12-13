@@ -228,9 +228,14 @@ public class RegionCommand {
 
         if (player != null) {
             if (region != null) {
-                RegionFlag flag = RegionFlag.valueOf(flagName);
+                RegionFlag flag = RegionFlag.getFlag(flagName);
 
-                if (!region.has(flag)) {
+                if (flag == null) {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.unkown_flag", flagName));
+                    return -1;
+                }
+
+                if (!region.has(flag, false)) {
                     region.addFlag(flag);
                     source.sendSuccess(() -> Component.translatable("key.fastregions.flags.add.success", flagName, regionName), false);
                     return 1;
@@ -258,8 +263,13 @@ public class RegionCommand {
 
         if (player != null) {
             if (region != null) {
-                RegionFlag flag = RegionFlag.valueOf(flagName);
-                
+                RegionFlag flag = RegionFlag.getFlag(flagName);
+
+                if (flag == null) {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.unkown_flag", flagName));
+                    return -1;
+                }
+
                 if (region.has(flag)) {
                     region.removeFlag(flag);
                     source.sendSuccess(() -> Component.translatable("key.fastregions.flags.remove.success", flagName, regionName), false);

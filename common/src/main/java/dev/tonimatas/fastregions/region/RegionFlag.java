@@ -32,6 +32,14 @@ public enum RegionFlag {
     public AllowedList.Type allowedListType() {
         return this.allowedListType;
     }
+    
+    public static RegionFlag getFlag(String flagName) {
+        try {
+            return RegionFlag.valueOf(flagName);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
+    }
 
     public static CompletableFuture<Suggestions> getCommandFlagsSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         String[] args = context.getLastChild().getInput().split(" ");
