@@ -11,26 +11,58 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class RegionManager {
-    private static final Map<String, Map<String, Region>> regions = new HashMap<>();
+    private static Path PATH;
+    private static Map<String, Map<String, Region>> regions;
 
     public static void loadRegions(MinecraftServer server) {
-        server.getAllLevels().forEach(level -> {
-            regions.putIfAbsent(LevelUtils.getName(level), new HashMap<>());
-            FastRegions.LOGGER.info(LevelUtils.getName(level));
-        });
-        // TODO: Load regions
-        FastRegions.LOGGER.info("Loaded {} regions", 1);
+        PATH = server.getWorldPath(LevelResource.ROOT).resolve("fastregions.json");
+        regions = new HashMap<>();
+
+        if (!Files.isRegularFile(PATH)) {
+            try {
+                Files.createFile(PATH);
+            } catch (IOException e) {
+                FastRegions.LOGGER.error("Error creating the FastRegions storage file.");
+            }
+        }
+
+        try {
+            String json = Files.readString(PATH, StandardCharsets.UTF_8);
+            regions = FastRegions.GSON.fromJson(json, FastRegions.GSON_TYPE);
+        } catch (IOException e) {
+            FastRegions.LOGGER.error("Error loading the FastRegions storage file.");
+        }
+
+        server.getAllLevels().forEach(level -> regions.putIfAbsent(LevelUtils.getName(level), new HashMap<>()));
+        FastRegions.LOGGER.info("Loaded {} regions", regions.size());
     }
     
     public static void saveRegions() {
-        // TODO
+        String json = FastRegions.GSON.toJson(regions);
+        Path tempFile = PATH.resolveSibling(PATH.getFileName() + ".tmp");
+        
+        try (BufferedWriter writer = Files.newBufferedWriter(tempFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+            writer.write(json);
+            writer.flush();
+            Files.move(tempFile, PATH, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            FastRegions.LOGGER.error("Error saving regions.");
+        }
     }
     
     @Nullable

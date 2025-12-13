@@ -12,5 +12,4 @@ public class FastRegionsInit {
     public static void onServerStarted(ServerStartedEvent event) {
         RegionManager.loadRegions(event.getServer());
     }
-
 }
