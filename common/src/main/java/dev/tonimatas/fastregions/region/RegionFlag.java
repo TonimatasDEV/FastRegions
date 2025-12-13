@@ -34,9 +34,18 @@ public enum RegionFlag {
     }
 
     public static CompletableFuture<Suggestions> getCommandFlagsSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
+        String[] args = context.getLastChild().getInput().split(" ");
+        boolean addedInRegion = !args[3].equalsIgnoreCase("add");
         ServerPlayer player = context.getSource().getPlayer();
-        if (player == null) return builder.buildFuture();
-        String[] regionNameList = Arrays.stream(RegionFlag.values()).map(RegionFlag::toString).toArray(String[]::new);
-        return SharedSuggestionProvider.suggest(regionNameList, builder);
+        Region region = RegionManager.getRegion(context.getSource().getLevel(), args[2]);
+
+        if (player == null || region == null) return builder.buildFuture();
+
+        String[] flagsNames = Arrays.stream(RegionFlag.values())
+                .filter(regionFlag -> region.has(regionFlag, false) == addedInRegion)
+                .map(RegionFlag::toString)
+                .toArray(String[]::new);
+
+        return SharedSuggestionProvider.suggest(flagsNames, builder);
     }
 }

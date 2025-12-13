@@ -48,11 +48,11 @@ public class RegionCommand {
                                 .suggests(RegionManager::getCommandRegionSuggestions)
                                 .then(Commands.literal("add")
                                         .then(Commands.argument("flag", StringArgumentType.word())
-                                                .suggests(RegionFlag::getCommandFlagsSuggestions) // TODO: Improve
+                                                .suggests(RegionFlag::getCommandFlagsSuggestions)
                                                 .executes(this::addRegionFlag)))
                                 .then(Commands.literal("remove")
                                         .then(Commands.argument("flag", StringArgumentType.word())
-                                                .suggests(RegionFlag::getCommandFlagsSuggestions) // TODO: Improve
+                                                .suggests(RegionFlag::getCommandFlagsSuggestions)
                                                 .executes(this::removeRegionFlag)))
                                 .then(Commands.literal("allow-list")
                                         .then(Commands.argument("flag", StringArgumentType.word())

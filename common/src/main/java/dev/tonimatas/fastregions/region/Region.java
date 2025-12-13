@@ -3,6 +3,7 @@ package dev.tonimatas.fastregions.region;
 import dev.tonimatas.fastregions.FastRegions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,14 +16,14 @@ public class Region {
     private int priority;
 
     public Region(BoundingBox box, List<RegionFlag> flags) {
-        this(box, flags, 1);
+        this(box, flags, 1, new HashMap<>());
     }
     
-    public Region(BoundingBox box, List<RegionFlag> flags, int priority) {
+    public Region(BoundingBox box, List<RegionFlag> flags, int priority, Map<RegionFlag, AllowedList> allowedLists) {
         this.box = box;
         this.flags = flags;
         this.priority = priority;
-        this.allowedLists = new HashMap<>();
+        this.allowedLists = allowedLists;
     }
     
     public boolean contains(BlockPos pos) {
@@ -54,10 +55,15 @@ public class Region {
     }
     
     public boolean has(RegionFlag flag) {
-        if (flag.hasAllowedList()) {
+        return has(flag, true);
+    }
+    
+    @ApiStatus.Internal
+    public boolean has(RegionFlag flag, boolean warn) {
+        if (flag.hasAllowedList() && warn) {
             FastRegions.LOGGER.warn("Please do not use Region#has for allowed-list flags, instead, use Region#hasFlagWithAllowedList.");
         }
-        
+
         return flags.contains(flag);
     }
 
