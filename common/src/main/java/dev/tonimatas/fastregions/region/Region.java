@@ -2,7 +2,6 @@ package dev.tonimatas.fastregions.region;
 
 import dev.tonimatas.fastregions.FastRegions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
@@ -10,24 +9,38 @@ import java.util.List;
 import java.util.Map;
 
 public class Region {
-    private final BoundingBox box;
+    private final int minX;
+    private final int minY;
+    private final int minZ;
+    private final int maxX;
+    private final int maxY;
+    private final int maxZ;
     private final List<RegionFlag> flags;
     private final Map<RegionFlag, AllowedList> allowedLists;
     private int priority;
 
-    public Region(BoundingBox box, List<RegionFlag> flags) {
-        this(box, flags, 1, new HashMap<>());
+    public Region(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags) {
+        this(minX, minY, minZ, maxX, maxY, maxZ, flags, 1, new HashMap<>());
     }
     
-    public Region(BoundingBox box, List<RegionFlag> flags, int priority, Map<RegionFlag, AllowedList> allowedLists) {
-        this.box = box;
+    public Region(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags, int priority, Map<RegionFlag, AllowedList> allowedLists) {
+        this.minX = minX;
+        this.minY = minY;
+        this.minZ = minZ;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.maxZ = maxZ;
         this.flags = flags;
         this.priority = priority;
         this.allowedLists = allowedLists;
     }
     
+    public boolean contains(int x, int y, int z) {
+        return x >= this.minX && x <= this.maxX && z >= this.minZ && z <= this.maxZ && y >= this.minY && y <= this.maxY;
+    }
+
     public boolean contains(BlockPos pos) {
-        return box.isInside(pos);
+        return contains(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public int getPriority() {

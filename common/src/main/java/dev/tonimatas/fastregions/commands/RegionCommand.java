@@ -14,7 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,7 +122,7 @@ public class RegionCommand {
             int minZ = Math.min(pos1.getZ(), pos2.getZ());
             int maxZ = Math.max(pos1.getZ(), pos2.getZ());
 
-            Region region = new Region(new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ), new ArrayList<>());
+            Region region = new Region(minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>());
 
             if (RegionManager.addRegion(player.level(), name, region)) {
                 POS1.remove(player.getName().getString());
