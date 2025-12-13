@@ -12,5 +12,6 @@
   "key.fastregions.flags.remove.success": "Flag %s has been removed from %s.",
   "key.fastregions.flags.remove.error": "The region %s doesn't have the flag %s.",
   "key.fastregions.remove.success": "Region %d has been removed.",
-  "key.fastregions.flags.unkown_flag": "The flag %s do not exits."
+  "key.fastregions.flags.unkown_flag": "The flag %s do not exits.",
+  "key.fastregions.list": "The world %s have these regions:"
 }

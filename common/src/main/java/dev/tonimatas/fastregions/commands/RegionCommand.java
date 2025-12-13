@@ -8,10 +8,12 @@ import dev.tonimatas.fastregions.region.Region;
 import dev.tonimatas.fastregions.region.RegionFlag;
 import dev.tonimatas.fastregions.region.RegionManager;
 import dev.tonimatas.fastregions.util.LevelUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -28,15 +30,18 @@ public class RegionCommand {
                 .then(Commands.literal("create")
                         .then(Commands.argument("name", StringArgumentType.word())
                                 .executes(this::regionCreate)))
-                .then(Commands.literal("expand-vert").executes((this::regionExpandVert)))
+                .then(Commands.literal("expand-vert")
+                        .executes(this::regionExpandVert))
                 .then(Commands.literal("remove")
                         .then(Commands.argument("region", StringArgumentType.word())
                                 .suggests(RegionManager::getCommandRegionSuggestions)
                                 .executes(this::removeRegion)))
                 .then(Commands.literal("pos1")
-                        .executes((this::regionPos1)))
+                        .executes(this::regionPos1))
                 .then(Commands.literal("pos2")
-                        .executes((this::regionPos2)))
+                        .executes(this::regionPos2))
+                .then(Commands.literal("list")
+                        .executes(this::regionList))
                 .then(Commands.literal("priority")
                         .then(Commands.argument("region", StringArgumentType.word())
                                 .suggests(RegionManager::getCommandRegionSuggestions)
@@ -290,5 +295,26 @@ public class RegionCommand {
         }
     }
 
+    public int regionList(CommandContext<CommandSourceStack> context) {
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
+        ServerLevel level = source.getLevel();
+
+        if (player != null) {
+            Map<String, Region> regions = RegionManager.getRegions(level);
+            
+            MutableComponent result = Component.translatable("key.fastregions.list", LevelUtils.getName(level));
+            
+            regions.keySet().forEach(s -> 
+                    result.append(Component.literal("\n - ").withStyle(ChatFormatting.DARK_GRAY).append(Component.literal(s).withStyle(ChatFormatting.GREEN))));
+            
+            source.sendSuccess(() -> result, false);
+            return 1;
+        } else {
+            source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
+            return -1;
+        }
+    }
+    
     // TODO: Region flags allowed-lists
 }
