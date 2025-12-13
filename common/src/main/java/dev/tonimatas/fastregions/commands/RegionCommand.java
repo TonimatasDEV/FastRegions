@@ -155,6 +155,7 @@ public class RegionCommand {
             }
 
             RegionManager.removeRegion(source.getLevel(), regionName);
+            RegionManager.saveRegions();
             source.sendSuccess(() -> Component.translatable("key.fastregions.remove.success", regionName), true);
             return 1;
         } else {
@@ -237,6 +238,7 @@ public class RegionCommand {
 
                 if (!region.has(flag, false)) {
                     region.addFlag(flag);
+                    RegionManager.saveRegions();
                     source.sendSuccess(() -> Component.translatable("key.fastregions.flags.add.success", flagName, regionName), false);
                     return 1;
                 } else {
@@ -272,6 +274,7 @@ public class RegionCommand {
 
                 if (region.has(flag)) {
                     region.removeFlag(flag);
+                    RegionManager.saveRegions();
                     source.sendSuccess(() -> Component.translatable("key.fastregions.flags.remove.success", flagName, regionName), false);
                     return 1;
                 } else {
