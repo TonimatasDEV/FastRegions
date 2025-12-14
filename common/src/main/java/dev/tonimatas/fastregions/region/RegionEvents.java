@@ -1,5 +1,6 @@
 package dev.tonimatas.fastregions.region;
 
+import dev.tonimatas.fastregions.util.PermissionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -8,11 +9,18 @@ public class RegionEvents {
     public static boolean cancelBlockEvent(Player player, Level level, BlockPos pos, RegionFlag flag) {
         if (level.isClientSide()) return false;
 
-        if (player != null) {
-            // TODO: Do permission check
-        }
-
         Region result = RegionManager.getRegion(level, pos);
-        return result != null && result.has(flag);
+
+        if (result != null) {
+            if (result.has(flag)) {
+                if (player != null) {
+                    return !PermissionUtils.hasRegionBypass(player, result.getName());
+                } else {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 }

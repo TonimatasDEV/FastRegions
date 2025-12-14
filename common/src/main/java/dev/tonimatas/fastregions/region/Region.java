@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Region {
+    private final String name;
     private final int minX;
     private final int minY;
     private final int minZ;
@@ -19,11 +20,12 @@ public class Region {
     private final Map<RegionFlag, AllowedList> allowedLists;
     private int priority;
 
-    public Region(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags) {
-        this(minX, minY, minZ, maxX, maxY, maxZ, flags, 1, new HashMap<>());
+    public Region(String name, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags) {
+        this(name, minX, minY, minZ, maxX, maxY, maxZ, flags, 1, new HashMap<>());
     }
     
-    public Region(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags, int priority, Map<RegionFlag, AllowedList> allowedLists) {
+    public Region(String name, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags, int priority, Map<RegionFlag, AllowedList> allowedLists) {
+        this.name = name;
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -34,7 +36,11 @@ public class Region {
         this.priority = priority;
         this.allowedLists = allowedLists;
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
     public boolean contains(int x, int y, int z) {
         return x >= this.minX && x <= this.maxX && z >= this.minZ && z <= this.maxZ && y >= this.minY && y <= this.maxY;
     }
