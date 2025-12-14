@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import dev.tonimatas.fastregions.region.AllowedList;
 import dev.tonimatas.fastregions.region.Region;
 import dev.tonimatas.fastregions.region.RegionFlag;
 import dev.tonimatas.fastregions.region.RegionManager;
@@ -19,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RegionCommand {
@@ -63,12 +65,12 @@ public class RegionCommand {
                                                 .suggests(RegionFlag::getCommandFlagsSuggestions)
                                                 .then(Commands.literal("add")
                                                         .then(Commands.argument("id", StringArgumentType.word())
-                                                                .suggests(null) // TODO: Implement
-                                                                .executes(null))) // TODO: Implement
+                                                                .suggests(AllowedList.Type::getSuggestions)
+                                                                .executes(this::addAllowListId)))
                                                 .then(Commands.literal("remove")
                                                         .then(Commands.argument("id", StringArgumentType.word())
-                                                                .suggests(null) // TODO: Implement
-                                                                .executes(null))) // TODO: Implement
+                                                                .suggests(AllowedList.Type::getSuggestions)
+                                                                .executes(this::removeAllowListId)))
                                         )
                                 )
                         )
@@ -127,7 +129,7 @@ public class RegionCommand {
             int minZ = Math.min(pos1.getZ(), pos2.getZ());
             int maxZ = Math.max(pos1.getZ(), pos2.getZ());
 
-            Region region = new Region(minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>());
+            Region region = new Region(name, minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>());
 
             if (RegionManager.addRegion(player.level(), name, region)) {
                 POS1.remove(player.getName().getString());
@@ -301,12 +303,14 @@ public class RegionCommand {
         ServerLevel level = source.getLevel();
 
         if (player != null) {
-            Map<String, Region> regions = RegionManager.getRegions(level);
-            
+            List<Region> regions = RegionManager.getRegions(level);
             MutableComponent result = Component.translatable("key.fastregions.list", LevelUtils.getName(level));
             
-            regions.keySet().forEach(s -> 
-                    result.append(Component.literal("\n - ").withStyle(ChatFormatting.DARK_GRAY).append(Component.literal(s).withStyle(ChatFormatting.GREEN))));
+            regions.forEach(region -> 
+                    result.append(Component.literal("\n - ")
+                            .withStyle(ChatFormatting.DARK_GRAY)
+                            .append(Component.literal(region.getName())
+                                    .withStyle(ChatFormatting.GREEN))));
             
             source.sendSuccess(() -> result, false);
             return 1;
@@ -316,5 +320,11 @@ public class RegionCommand {
         }
     }
     
-    // TODO: Region flags allowed-lists
+    public int addAllowListId(CommandContext<CommandSourceStack> context) {
+        return -1; // TODO: Implement
+    }
+
+    public int removeAllowListId(CommandContext<CommandSourceStack> context) {
+        return -1; // TODO: Implement
+    }
 }

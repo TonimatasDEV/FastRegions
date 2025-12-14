@@ -21,13 +21,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class RegionManager {
     private static Path PATH;
-    private static Map<String, Map<String, Region>> regions;
+    private static Map<String, ArrayList<Region>> regions;
 
     public static void loadRegions(MinecraftServer server) {
         PATH = server.getWorldPath(LevelResource.ROOT).resolve("fastregions.json");
@@ -48,7 +50,7 @@ public class RegionManager {
             FastRegions.LOGGER.error("Error loading the FastRegions storage file.");
         }
 
-        server.getAllLevels().forEach(level -> regions.putIfAbsent(LevelUtils.getName(level), new HashMap<>()));
+        server.getAllLevels().forEach(level -> regions.putIfAbsent(LevelUtils.getName(level), new ArrayList<>()));
         FastRegions.LOGGER.info("Loaded {} regions", regions.size());
     }
     
@@ -67,27 +69,37 @@ public class RegionManager {
     
     @Nullable
     public static Region getRegion(Level level, String name) {
-        return getRegions(level).get(name);
+        Region result = null;
+
+        for (Region region : getRegions(level)) {
+            if (region.getName().equalsIgnoreCase(name)) {
+                result = region;
+                break;
+            }
+        }
+
+        return result;
     }
 
     public static boolean addRegion(Level level, String name, Region region) {
         if (getRegion(level, name) != null) return false;
-        regions.get(LevelUtils.getName(level)).put(name, region);
+        regions.get(LevelUtils.getName(level)).add(region);
         return true;
     }
     
     public static void removeRegion(Level level, String name) {
-        regions.get(LevelUtils.getName(level)).remove(name);
+        Region region = getRegion(level, name);
+        regions.get(LevelUtils.getName(level)).remove(region);
     }
     
-    public static Map<String, Region> getRegions(Level level) {
-        return regions.getOrDefault(LevelUtils.getName(level), Map.of());
+    public static List<Region> getRegions(Level level) {
+        return regions.getOrDefault(LevelUtils.getName(level), new ArrayList<>());
     }
     
     public static CompletableFuture<Suggestions> getCommandRegionSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player == null) return builder.buildFuture();
-        String[] regionNameList = regions.get(LevelUtils.getName(player.level())).keySet().toArray(new String[0]);
+        List<String> regionNameList = regions.get(LevelUtils.getName(player.level())).stream().map(Region::getName).toList();
         return SharedSuggestionProvider.suggest(regionNameList, builder);
     }
     
@@ -95,7 +107,7 @@ public class RegionManager {
     public static Region getRegion(Level level, BlockPos pos) {
         Region result = null;
 
-        for (Region region : RegionManager.getRegions(level).values()) {
+        for (Region region : RegionManager.getRegions(level)) {
             if (!region.contains(pos)) continue;
 
             if (result == null || result.getPriority() < region.getPriority()) {
