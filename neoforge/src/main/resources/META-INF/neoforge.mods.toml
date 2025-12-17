@@ -4,8 +4,6 @@ license="MIT"
 issueTrackerURL="https://github.com/TonimatasDEV/FastRegions/issues"
 
 [[mixins]]
-config="fastregions.mixins.json"
-[[mixins]]
 config="fastregions.neoforge.mixins.json"
 
 [[mods]]

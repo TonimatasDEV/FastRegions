@@ -20,7 +20,6 @@
     ]
   },
   "mixins": [
-    "fastregions.mixins.json",
     "fastregions.fabric.mixins.json"
   ],
   "depends": {
