@@ -279,7 +279,7 @@ public class RegionCommand {
                     return -1;
                 }
 
-                if (region.has(flag)) {
+                if (region.has(flag, false)) {
                     region.removeFlag(flag);
                     RegionManager.saveRegions();
                     source.sendSuccess(() -> Component.translatable("key.fastregions.flags.remove.success", flagName, regionName), false);
@@ -339,7 +339,7 @@ public class RegionCommand {
                     return -1;
                 }
 
-                if (region.has(flag)) {
+                if (region.has(flag, false)) {
                     if (flag.allowedListType().getIDs().contains(id)) {
                         region.addAllowedList(flag, id);
                         RegionManager.saveRegions();
@@ -381,7 +381,7 @@ public class RegionCommand {
                     return -1;
                 }
 
-                if (region.has(flag)) {
+                if (region.has(flag, false)) {
                     if (flag.allowedListType().getIDs().contains(id)) {
                         region.removeAllowedList(flag, id);
                         RegionManager.saveRegions();

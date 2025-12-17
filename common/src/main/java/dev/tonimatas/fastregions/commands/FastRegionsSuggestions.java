@@ -26,9 +26,8 @@ public class FastRegionsSuggestions {
                 RegionFlag flag = RegionFlag.getFlag(flagName);
 
                 if (flag != null) {
-                    if (region.has(flag)) {
+                    if (region.has(flag, false)) {
                         if (add) {
-                            System.out.println(flag.allowedListType().getAddSuggestions(region, flag));
                             flag.allowedListType().getAddSuggestions(region, flag).forEach(builder::suggest);
                         } else {
                             flag.allowedListType().getRemoveSuggestions(region, flag).forEach(builder::suggest);
