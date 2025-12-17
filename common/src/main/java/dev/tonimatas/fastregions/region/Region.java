@@ -1,12 +1,14 @@
 package dev.tonimatas.fastregions.region;
 
 import dev.tonimatas.fastregions.FastRegions;
+import dev.tonimatas.fastregions.region.allowlist.AllowedList;
 import net.minecraft.core.BlockPos;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Region {
     private final String name;
@@ -91,5 +93,19 @@ public class Region {
         if (!flag.hasAllowedList()) return false;
 
         return !allowedLists.getOrDefault(flag, AllowedList.empty()).contains(id);
+    }
+    
+    public void addAllowedList(RegionFlag flag, String id) {
+        if (!flag.hasAllowedList()) return;
+        Objects.requireNonNull(allowedLists.putIfAbsent(flag, new AllowedList())).add(id);
+    }
+
+    public void removeAllowedList(RegionFlag flag, String id) {
+        if (!flag.hasAllowedList()) return;
+        Objects.requireNonNull(allowedLists.putIfAbsent(flag, new AllowedList())).remove(id);
+    }
+
+    public boolean allowedListHas(RegionFlag flag, String id) {
+        return Objects.requireNonNull(allowedLists.putIfAbsent(flag, new AllowedList())).contains(id);
     }
 }

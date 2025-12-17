@@ -13,5 +13,8 @@
   "key.fastregions.flags.remove.error": "The region %s doesn't have the flag %s.",
   "key.fastregions.remove.success": "Region %d has been removed.",
   "key.fastregions.flags.unkown_flag": "The flag %s do not exits.",
-  "key.fastregions.list": "The world %s have these regions:"
+  "key.fastregions.list": "The world %s have these regions:",
+  "key.fastregions.allow_list.unknown_id": "The ID %s doesn't exist.",
+  "key.fastregions.allow_list.add.success": "The region %s now have %s in the flag %s allowed list.",
+  "key.fastregions.allow_list.remove.success": "Removed %s from the allowed list of the flag %s in the region %s."
 }

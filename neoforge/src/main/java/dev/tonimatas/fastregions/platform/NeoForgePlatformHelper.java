@@ -19,6 +19,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public boolean hasPermission(Player player, String permission) {
-        return player.hasPermissions(3); // TODO
+        return false;
+        //return player.hasPermissions(3); // TODO
     }
 }

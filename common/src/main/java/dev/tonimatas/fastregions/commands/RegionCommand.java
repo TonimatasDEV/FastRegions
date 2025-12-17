@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import dev.tonimatas.fastregions.region.AllowedList;
 import dev.tonimatas.fastregions.region.Region;
 import dev.tonimatas.fastregions.region.RegionFlag;
 import dev.tonimatas.fastregions.region.RegionManager;
@@ -64,12 +63,14 @@ public class RegionCommand {
                                         .then(Commands.argument("flag", StringArgumentType.word())
                                                 .suggests(RegionFlag::getCommandFlagsSuggestions)
                                                 .then(Commands.literal("add")
-                                                        .then(Commands.argument("id", StringArgumentType.word())
-                                                                .suggests(AllowedList.Type::getSuggestions)
+                                                        .then(Commands.argument("id", StringArgumentType.greedyString())
+                                                                .suggests((context, builder) ->
+                                                                        FastRegionsSuggestions.getAllowedListSuggestions(context, builder, true))
                                                                 .executes(this::addAllowListId)))
                                                 .then(Commands.literal("remove")
-                                                        .then(Commands.argument("id", StringArgumentType.word())
-                                                                .suggests(AllowedList.Type::getSuggestions)
+                                                        .then(Commands.argument("id", StringArgumentType.greedyString())
+                                                                .suggests((context, builder) -> 
+                                                                        FastRegionsSuggestions.getAllowedListSuggestions(context, builder, false))
                                                                 .executes(this::removeAllowListId)))
                                         )
                                 )
@@ -321,10 +322,86 @@ public class RegionCommand {
     }
     
     public int addAllowListId(CommandContext<CommandSourceStack> context) {
-        return -1; // TODO: Implement
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
+        ServerLevel level = source.getLevel();
+        String regionName = context.getArgument("region", String.class);
+        String flagName = context.getArgument("flag", String.class);
+        String id = context.getArgument("id", String.class);
+        Region region = RegionManager.getRegion(level, regionName);
+
+        if (player != null) {
+            if (region != null) {
+                RegionFlag flag = RegionFlag.getFlag(flagName);
+
+                if (flag == null) {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.unkown_flag", flagName));
+                    return -1;
+                }
+
+                if (region.has(flag)) {
+                    if (flag.allowedListType().getIDs().contains(id)) {
+                        region.addAllowedList(flag, id);
+                        RegionManager.saveRegions();
+                        source.sendSuccess(() -> Component.translatable("key.fastregions.allow_list.add.success", regionName, id, flagName), false);
+                        return 1;
+                    } else {
+                        source.sendFailure(Component.translatable("key.fastregions.allow_list.unknown_id", id));
+                        return -1;
+                    }
+                } else {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.remove.error", regionName, flagName));
+                    return -1;
+                }
+            } else {
+                source.sendFailure(Component.translatable("key.fastregions.error.unknown_region", regionName));
+                return -1;
+            }
+        } else {
+            source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
+            return -1;
+        }
     }
 
     public int removeAllowListId(CommandContext<CommandSourceStack> context) {
-        return -1; // TODO: Implement
+        CommandSourceStack source = context.getSource();
+        ServerPlayer player = source.getPlayer();
+        ServerLevel level = source.getLevel();
+        String regionName = context.getArgument("region", String.class);
+        String flagName = context.getArgument("flag", String.class);
+        String id = context.getArgument("id", String.class);
+        Region region = RegionManager.getRegion(level, regionName);
+
+        if (player != null) {
+            if (region != null) {
+                RegionFlag flag = RegionFlag.getFlag(flagName);
+
+                if (flag == null) {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.unkown_flag", flagName));
+                    return -1;
+                }
+
+                if (region.has(flag)) {
+                    if (flag.allowedListType().getIDs().contains(id)) {
+                        region.removeAllowedList(flag, id);
+                        RegionManager.saveRegions();
+                        source.sendSuccess(() -> Component.translatable("key.fastregions.allow_list.remove.success", id, flagName, regionName), false);
+                        return 1;
+                    } else {
+                        source.sendFailure(Component.translatable("key.fastregions.allow_list.unknown_id", id));
+                        return -1;
+                    }
+                } else {
+                    source.sendFailure(Component.translatable("key.fastregions.flags.remove.error", regionName, flagName));
+                    return -1;
+                }
+            } else {
+                source.sendFailure(Component.translatable("key.fastregions.error.unknown_region", regionName));
+                return -1;
+            }
+        } else {
+            source.sendFailure(Component.translatable("key.fastregions.error.players_only"));
+            return -1;
+        }
     }
 }

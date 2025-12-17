@@ -3,6 +3,7 @@ package dev.tonimatas.fastregions.region;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import dev.tonimatas.fastregions.region.allowlist.AllowedListTypes;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,25 +12,25 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public enum RegionFlag {
-    BLOCK_BREAK(AllowedList.Type.BLOCKS),
-    BLOCK_INTERACT(AllowedList.Type.BLOCKS), // TODO
+    BLOCK_BREAK(AllowedListTypes.BLOCKS),
+    BLOCK_INTERACT(AllowedListTypes.BLOCKS), // TODO
     INVINCIBLE; // TODO
 
-    private final AllowedList.Type allowedListType;
+    private final AllowedListTypes allowedListType;
     
     RegionFlag() {
-        this(AllowedList.Type.NONE);
+        this(null);
     }
     
-    RegionFlag(AllowedList.Type allowedListType) {
+    RegionFlag(AllowedListTypes allowedListType) {
         this.allowedListType = allowedListType;
     }
 
     public boolean hasAllowedList() {
-        return AllowedList.Type.NONE != this.allowedListType;
+        return this.allowedListType != null;
     }
     
-    public AllowedList.Type allowedListType() {
+    public AllowedListTypes allowedListType() {
         return this.allowedListType;
     }
     
