@@ -13,8 +13,9 @@ import java.util.concurrent.CompletableFuture;
 
 public enum RegionFlag {
     BLOCK_BREAK(AllowedListTypes.BLOCKS),
-    BLOCK_INTERACT(AllowedListTypes.BLOCKS), // TODO
-    INVINCIBLE; // TODO
+    BLOCK_INTERACT(AllowedListTypes.BLOCKS),
+    BLOCK_PLACE(AllowedListTypes.BLOCKS),
+    INVINCIBLE_PLAYERS;
 
     private final AllowedListTypes allowedListType;
     

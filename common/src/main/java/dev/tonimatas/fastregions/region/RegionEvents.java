@@ -27,4 +27,18 @@ public class RegionEvents {
         
         return false;
     }
+
+    public static boolean cancelEntityEvent(Player player, Level level, RegionFlag flag) {
+        if (level.isClientSide()) return false;
+
+        Region result = RegionManager.getRegion(level, player.getOnPos());
+
+        if (result != null) {
+            if (result.has(flag)) {
+                return !PermissionUtils.hasRegionBypass(player, result.getName());
+            }
+        }
+
+        return false;
+    }
 }
