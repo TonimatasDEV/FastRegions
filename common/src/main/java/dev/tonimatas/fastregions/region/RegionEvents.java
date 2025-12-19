@@ -28,10 +28,10 @@ public class RegionEvents {
         return false;
     }
 
-    public static boolean cancelEntityEvent(Player player, Level level, RegionFlag flag) {
+    public static boolean cancelEntityEvent(Player player, Level level, BlockPos pos, RegionFlag flag) {
         if (level.isClientSide()) return false;
 
-        Region result = RegionManager.getRegion(level, player.getOnPos());
+        Region result = RegionManager.getRegion(level, pos);
 
         if (result != null) {
             if (result.has(flag)) {

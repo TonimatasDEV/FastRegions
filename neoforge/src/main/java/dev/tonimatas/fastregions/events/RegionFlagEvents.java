@@ -12,6 +12,7 @@ import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 
 @EventBusSubscriber(modid = FastRegions.MOD_ID)
 public class RegionFlagEvents {
@@ -36,9 +37,18 @@ public class RegionFlagEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onBlockPlace(LivingIncomingDamageEvent event) {
+    public static void onIncomingDamage(LivingIncomingDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
-            event.setCanceled(RegionEvents.cancelEntityEvent(player, player.level(), RegionFlag.INVINCIBLE_PLAYERS));
+            if (event.getSource().getEntity() instanceof Player attacker) {
+                event.setCanceled(RegionEvents.cancelEntityEvent(attacker, attacker.level(), player.getOnPos(), RegionFlag.PVP));
+            }
+            
+            event.setCanceled(RegionEvents.cancelEntityEvent(player, player.level(), player.getOnPos(), RegionFlag.INVINCIBLE_PLAYERS));
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
+        event.getAffectedBlocks().removeIf(toBlow -> RegionEvents.cancelBlockEvent(null, event.getLevel(), toBlow, RegionFlag.EXPLOSION));
     }
 }

@@ -15,7 +15,9 @@ public enum RegionFlag {
     BLOCK_BREAK(AllowedListTypes.BLOCKS),
     BLOCK_INTERACT(AllowedListTypes.BLOCKS),
     BLOCK_PLACE(AllowedListTypes.BLOCKS),
-    INVINCIBLE_PLAYERS;
+    INVINCIBLE_PLAYERS,
+    PVP,
+    EXPLOSION;
 
     private final AllowedListTypes allowedListType;
     
