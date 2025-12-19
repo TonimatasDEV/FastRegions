@@ -3,6 +3,7 @@ package dev.tonimatas.fastregions.region;
 import dev.tonimatas.fastregions.util.PermissionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +26,26 @@ public class RegionEvents {
             }
         }
         
+        return false;
+    }
+
+    public static boolean cancelEntityToEntityEvent(Entity action, Entity receiver, RegionFlag flag) {
+        Level level = receiver.level();
+        if (level.isClientSide()) return false;
+
+        Region result = RegionManager.getRegion(level, receiver.getOnPos());
+        String entityId = BuiltInRegistries.ENTITY_TYPE.getKey(receiver.getType()).toString();
+
+        if (result != null) {
+            if (result.hasFlagWithAllowedList(flag, entityId)) {
+                if (action instanceof Player player) {
+                    return !PermissionUtils.hasRegionBypass(player, result.getName());
+                } else {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
