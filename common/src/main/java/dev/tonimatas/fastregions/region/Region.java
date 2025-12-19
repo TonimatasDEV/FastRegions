@@ -90,7 +90,7 @@ public class Region {
 
     public boolean hasFlagWithAllowedList(RegionFlag flag, String id) {
         if (!flags.contains(flag)) return false;
-        if (!flag.hasAllowedList()) return false;
+        if (!flag.hasAllowedList()) return flags.contains(flag);
 
         return !allowedLists.getOrDefault(flag, AllowedList.empty()).contains(id);
     }
