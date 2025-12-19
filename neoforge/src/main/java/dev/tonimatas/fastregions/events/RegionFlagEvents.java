@@ -42,8 +42,10 @@ public class RegionFlagEvents {
             if (event.getSource().getEntity() instanceof Player attacker) {
                 event.setCanceled(RegionEvents.cancelEntityEvent(attacker, attacker.level(), player.getOnPos(), RegionFlag.PVP));
             }
-            
-            event.setCanceled(RegionEvents.cancelEntityEvent(player, player.level(), player.getOnPos(), RegionFlag.INVINCIBLE_PLAYERS));
+
+            if (!event.isCanceled()) {
+                event.setCanceled(RegionEvents.cancelEntityEvent(player, player.level(), player.getOnPos(), RegionFlag.INVINCIBLE_PLAYERS));
+            }
         }
     }
 
