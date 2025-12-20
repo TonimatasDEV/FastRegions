@@ -45,7 +45,11 @@ public class RegionManager {
 
         try {
             String json = Files.readString(PATH, StandardCharsets.UTF_8);
-            regions = FastRegions.GSON.fromJson(json, FastRegions.GSON_TYPE);
+            Map<String, ArrayList<Region>> jsonRegions = FastRegions.GSON.fromJson(json, FastRegions.GSON_TYPE);
+
+            if (jsonRegions != null) {
+                regions = jsonRegions;
+            }
         } catch (IOException e) {
             FastRegions.LOGGER.error("Error loading the FastRegions storage file.");
         }
