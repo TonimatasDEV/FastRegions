@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 public class RegionEvents {
-    public static boolean cancelBlockEvent(Player player, Level level, BlockPos pos, RegionFlag flag) {
+    public static boolean cancelBlockEvent(Entity entity, Level level, BlockPos pos, RegionFlag flag) {
         if (level.isClientSide()) return false;
 
         Region result = RegionManager.getRegion(level, pos);
@@ -18,7 +18,7 @@ public class RegionEvents {
 
         if (result != null) {
             if (result.hasFlagWithAllowedList(flag, blockId)) {
-                if (player != null) {
+                if (entity instanceof Player player) {
                     return !PermissionUtils.hasRegionBypass(player, result.getName());
                 } else {
                     return true;

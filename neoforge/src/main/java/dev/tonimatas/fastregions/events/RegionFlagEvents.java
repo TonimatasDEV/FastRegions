@@ -5,6 +5,7 @@ import dev.tonimatas.fastregions.region.RegionEvents;
 import dev.tonimatas.fastregions.region.RegionFlag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,8 +23,13 @@ public class RegionFlagEvents {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onBlockPlace(BlockEvent.BreakEvent event) {
-        event.setCanceled(RegionEvents.cancelBlockEvent(event.getPlayer(), event.getPlayer().level(), event.getPos(), RegionFlag.BLOCK_PLACE));
+    public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
+        event.setCanceled(RegionEvents.cancelBlockEvent(event.getEntity(), (Level) event.getLevel(), event.getPos(), RegionFlag.BLOCK_PLACE));
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onMultiPlaceBlock(BlockEvent.EntityMultiPlaceEvent event) {
+        event.setCanceled(RegionEvents.cancelBlockEvent(event.getEntity(), (Level) event.getLevel(), event.getPos(), RegionFlag.BLOCK_PLACE));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
