@@ -16,7 +16,8 @@ public class FastRegions {
     public static final String MOD_ID = "fastregions";
     public static final Logger LOGGER = LoggerFactory.getLogger("FastRegions");
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static final Type GSON_TYPE = new TypeToken<Map<String, ArrayList<Region>>>() {}.getType();
+    public static final Type GSON_TYPE = new TypeToken<Map<String, ArrayList<Region>>>() {
+    }.getType();
 
     public static void init() {
         String platform = Services.PLATFORM.getPlatformName();

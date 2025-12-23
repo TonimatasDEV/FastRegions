@@ -57,11 +57,11 @@ public class RegionManager {
         server.getAllLevels().forEach(level -> regions.putIfAbsent(LevelUtils.getName(level), new ArrayList<>()));
         FastRegions.LOGGER.info("Loaded {} regions", regions.size());
     }
-    
+
     public static void saveRegions() {
         String json = FastRegions.GSON.toJson(regions);
         Path tempFile = PATH.resolveSibling(PATH.getFileName() + ".tmp");
-        
+
         try (BufferedWriter writer = Files.newBufferedWriter(tempFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
             writer.write(json);
             writer.flush();
@@ -70,7 +70,7 @@ public class RegionManager {
             FastRegions.LOGGER.error("Error saving regions.");
         }
     }
-    
+
     @Nullable
     public static Region getRegion(Level level, String name) {
         Region result = null;
@@ -90,23 +90,23 @@ public class RegionManager {
         regions.get(LevelUtils.getName(level)).add(region);
         return true;
     }
-    
+
     public static void removeRegion(Level level, String name) {
         Region region = getRegion(level, name);
         regions.get(LevelUtils.getName(level)).remove(region);
     }
-    
+
     public static List<Region> getRegions(Level level) {
         return regions.getOrDefault(LevelUtils.getName(level), new ArrayList<>());
     }
-    
+
     public static CompletableFuture<Suggestions> getCommandRegionSuggestions(CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) {
         ServerPlayer player = context.getSource().getPlayer();
         if (player == null) return builder.buildFuture();
         List<String> regionNameList = regions.get(LevelUtils.getName(player.level())).stream().map(Region::getName).toList();
         return SharedSuggestionProvider.suggest(regionNameList, builder);
     }
-    
+
     @Nullable
     public static Region getRegion(Level level, BlockPos pos) {
         Region result = null;
@@ -118,7 +118,7 @@ public class RegionManager {
                 result = region;
             }
         }
-        
+
         return result;
     }
 }

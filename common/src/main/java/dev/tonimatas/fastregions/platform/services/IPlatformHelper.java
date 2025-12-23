@@ -20,7 +20,8 @@ public interface IPlatformHelper {
 
     /**
      * Check player permissions.
-     * @param player Player name.
+     *
+     * @param player     Player name.
      * @param permission Permission to check.
      * @return Result of player permission.
      */

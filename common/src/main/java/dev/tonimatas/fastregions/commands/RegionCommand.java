@@ -69,7 +69,7 @@ public class RegionCommand {
                                                                 .executes(this::addAllowListId)))
                                                 .then(Commands.literal("remove")
                                                         .then(Commands.argument("id", StringArgumentType.greedyString())
-                                                                .suggests((context, builder) -> 
+                                                                .suggests((context, builder) ->
                                                                         FastRegionsSuggestions.getAllowedListSuggestions(context, builder, false))
                                                                 .executes(this::removeAllowListId)))
                                         )
@@ -147,7 +147,7 @@ public class RegionCommand {
             return -1;
         }
     }
-    
+
     private int removeRegion(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();
@@ -225,7 +225,7 @@ public class RegionCommand {
             return -1;
         }
     }
-    
+
     public int addRegionFlag(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();
@@ -261,7 +261,7 @@ public class RegionCommand {
             return -1;
         }
     }
-    
+
     public int removeRegionFlag(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();
@@ -306,13 +306,13 @@ public class RegionCommand {
         if (player != null) {
             List<Region> regions = RegionManager.getRegions(level);
             MutableComponent result = Component.translatable("key.fastregions.list", LevelUtils.getName(level));
-            
-            regions.forEach(region -> 
+
+            regions.forEach(region ->
                     result.append(Component.literal("\n - ")
                             .withStyle(ChatFormatting.DARK_GRAY)
                             .append(Component.literal(region.getName())
                                     .withStyle(ChatFormatting.GREEN))));
-            
+
             source.sendSuccess(() -> result, false);
             return 1;
         } else {
@@ -320,7 +320,7 @@ public class RegionCommand {
             return -1;
         }
     }
-    
+
     public int addAllowListId(CommandContext<CommandSourceStack> context) {
         CommandSourceStack source = context.getSource();
         ServerPlayer player = source.getPlayer();

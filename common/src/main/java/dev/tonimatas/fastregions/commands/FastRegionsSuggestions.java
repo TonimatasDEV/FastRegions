@@ -36,7 +36,7 @@ public class FastRegionsSuggestions {
                 }
             }
         }
-        
+
         return builder.buildFuture();
     }
 }

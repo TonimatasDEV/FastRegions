@@ -1,7 +1,7 @@
 package dev.tonimatas.fastregions.platform;
 
-import dev.tonimatas.fastregions.platform.services.IPlatformHelper;
 import dev.tonimatas.fastregions.FastRegions;
+import dev.tonimatas.fastregions.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 

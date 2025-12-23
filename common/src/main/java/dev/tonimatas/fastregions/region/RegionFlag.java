@@ -21,23 +21,15 @@ public enum RegionFlag {
     ENTITY_DAMAGE(AllowedListTypes.ENTITIES);
 
     private final AllowedListTypes allowedListType;
-    
+
     RegionFlag() {
         this(null);
     }
-    
+
     RegionFlag(AllowedListTypes allowedListType) {
         this.allowedListType = allowedListType;
     }
 
-    public boolean hasAllowedList() {
-        return this.allowedListType != null;
-    }
-    
-    public AllowedListTypes allowedListType() {
-        return this.allowedListType;
-    }
-    
     public static RegionFlag getFlag(String flagName) {
         try {
             return RegionFlag.valueOf(flagName);
@@ -60,5 +52,13 @@ public enum RegionFlag {
                 .toArray(String[]::new);
 
         return SharedSuggestionProvider.suggest(flagsNames, builder);
+    }
+
+    public boolean hasAllowedList() {
+        return this.allowedListType != null;
+    }
+
+    public AllowedListTypes allowedListType() {
+        return this.allowedListType;
     }
 }

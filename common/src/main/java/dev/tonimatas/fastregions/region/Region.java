@@ -25,7 +25,7 @@ public class Region {
     public Region(String name, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags) {
         this(name, minX, minY, minZ, maxX, maxY, maxZ, flags, 1, new HashMap<>());
     }
-    
+
     public Region(String name, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, List<RegionFlag> flags, int priority, Map<RegionFlag, AllowedList> allowedLists) {
         this.name = name;
         this.minX = minX;
@@ -58,7 +58,7 @@ public class Region {
     public void setPriority(int value) {
         this.priority = value;
     }
-    
+
     public void addFlag(RegionFlag flag) {
         flags.add(flag);
 
@@ -66,19 +66,19 @@ public class Region {
             allowedLists.put(flag, AllowedList.empty());
         }
     }
-    
+
     public void removeFlag(RegionFlag flag) {
         flags.remove(flag);
-        
+
         if (flag.hasAllowedList()) {
             allowedLists.remove(flag);
         }
     }
-    
+
     public boolean has(RegionFlag flag) {
         return has(flag, true);
     }
-    
+
     @ApiStatus.Internal
     public boolean has(RegionFlag flag, boolean warn) {
         if (flag.hasAllowedList() && warn) {
@@ -94,7 +94,7 @@ public class Region {
 
         return !allowedLists.getOrDefault(flag, AllowedList.empty()).contains(id);
     }
-    
+
     public void addAllowedList(RegionFlag flag, String id) {
         if (!flag.hasAllowedList()) return;
         Objects.requireNonNull(allowedLists.putIfAbsent(flag, new AllowedList())).add(id);
