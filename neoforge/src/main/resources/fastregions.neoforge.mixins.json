@@ -4,10 +4,12 @@
   "package": "dev.tonimatas.fastregions.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BlockAttachedEntityMixin",
     "DripleafMixin",
     "ItemFrameMixin",
-    "BlockAttachedEntityMixin",
+    "LeavesBlockMixin",
     "ServerLevelMixin",
+    "SpreadingSnowyDirtBlockMixin",
     "VehicleEntityMixin"
   ],
   "injectors": {

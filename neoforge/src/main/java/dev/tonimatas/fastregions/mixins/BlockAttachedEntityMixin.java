@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockAttachedEntity.class)
 public class BlockAttachedEntityMixin {
     @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
-    private void fastregions$destroyItemFrameFlag(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void fastregions$destroyPaintingFlag(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         BlockAttachedEntity blockAttachedEntity = ((BlockAttachedEntity) (Object) this);
 
         if (blockAttachedEntity instanceof Painting) {

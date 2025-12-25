@@ -25,6 +25,9 @@ public enum RegionFlag {
     ROTATE_ITEM_FRAME,
     DESTROY_ITEM_FRAME,
     DESTROY_PAINTING,
+    LEAF_DECAY,
+    GRASS_SPREAD,
+    MYCELIUM_SPREAD,
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?
     VEHICLE_DESTROY; // TODO: AllowList?
