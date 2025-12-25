@@ -2,6 +2,7 @@ package dev.tonimatas.fastregions.platform;
 
 import dev.tonimatas.fastregions.impl.allowlist.BlocksExtension;
 import dev.tonimatas.fastregions.impl.allowlist.EntitiesExtension;
+import dev.tonimatas.fastregions.impl.allowlist.ItemsExtension;
 import dev.tonimatas.fastregions.platform.services.IExtensionHelper;
 import dev.tonimatas.fastregions.region.allowlist.AllowedListExtension;
 
@@ -14,5 +15,10 @@ public class NeoForgeExtensionHelper implements IExtensionHelper {
     @Override
     public AllowedListExtension entities() {
         return new EntitiesExtension();
+    }
+
+    @Override
+    public AllowedListExtension items() {
+        return new ItemsExtension();
     }
 }

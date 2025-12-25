@@ -18,7 +18,8 @@ public enum RegionFlag {
     INVINCIBLE_PLAYERS,
     PVP,
     EXPLOSION,
-    ENTITY_DAMAGE(AllowedListTypes.ENTITIES);
+    ENTITY_DAMAGE(AllowedListTypes.ENTITIES),
+    USE_ITEMS(AllowedListTypes.ITEMS); // TODO
 
     private final AllowedListTypes allowedListType;
 

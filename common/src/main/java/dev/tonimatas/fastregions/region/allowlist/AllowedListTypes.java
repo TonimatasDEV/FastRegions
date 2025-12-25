@@ -8,7 +8,8 @@ import java.util.List;
 
 public enum AllowedListTypes {
     BLOCKS(Services.EXTENSION.blocks()),
-    ENTITIES(Services.EXTENSION.entities());
+    ENTITIES(Services.EXTENSION.entities()),
+    ITEMS(Services.EXTENSION.items());
 
     private final AllowedListExtension extension;
 

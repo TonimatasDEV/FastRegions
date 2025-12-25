@@ -17,4 +17,11 @@ public interface IExtensionHelper {
      * @return The entities allow list extension.
      */
     AllowedListExtension entities();
+
+    /**
+     * Gets the items allow list extension implementation.
+     *
+     * @return The items allow list extension.
+     */
+    AllowedListExtension items();
 }
