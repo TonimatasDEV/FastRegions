@@ -1,4 +1,4 @@
-package dev.tonimatas.fastregions.region.allowlist.impl;
+package dev.tonimatas.fastregions.impl.allowlist;
 
 import dev.tonimatas.fastregions.region.allowlist.AllowedListExtension;
 import net.minecraft.core.registries.BuiltInRegistries;
