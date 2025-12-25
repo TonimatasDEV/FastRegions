@@ -22,11 +22,11 @@ public class SpreadingSnowyDirtBlockMixin {
         Block block = state.getBlock();
         
         if (block instanceof GrassBlock) {
-            if (RegionEvents.cancelGenericEvent((Level) level, pos, RegionFlag.GRASS_SPREAD)) {
+            if (RegionEvents.cancelGenericEvent(level, pos, RegionFlag.GRASS_SPREAD)) {
                 cir.setReturnValue(false);
             }
         } else if (block instanceof MyceliumBlock) {
-            if (RegionEvents.cancelGenericEvent((Level) level, pos, RegionFlag.MYCELIUM_SPREAD)) {
+            if (RegionEvents.cancelGenericEvent(level, pos, RegionFlag.MYCELIUM_SPREAD)) {
                 cir.setReturnValue(false);
             }
         }

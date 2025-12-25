@@ -32,7 +32,12 @@ public enum RegionFlag {
     VINE_GROWTH,
     SNOW_MELT,
     SNOW_FALL,
+    ICE_FORM,
+    ICE_MELT,
+    FROSTED_ICE_FORM,
+    FROSTED_ICE_MELT,
     SNOWGOLEM_TRAILS,
+    CORAL_DIE,
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?
     VEHICLE_DESTROY; // TODO: AllowList?

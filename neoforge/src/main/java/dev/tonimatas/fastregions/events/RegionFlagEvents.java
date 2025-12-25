@@ -86,7 +86,7 @@ public class RegionFlagEvents {
     
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onCropGrowth(CropGrowEvent.Pre event) {
-        if (RegionEvents.cancelGenericEvent((Level) event.getLevel(), event.getPos(), RegionFlag.CROP_GROWTH)) {
+        if (RegionEvents.cancelGenericEvent(event.getLevel(), event.getPos(), RegionFlag.CROP_GROWTH)) {
             event.setResult(CropGrowEvent.Pre.Result.DO_NOT_GROW);
         }
     }

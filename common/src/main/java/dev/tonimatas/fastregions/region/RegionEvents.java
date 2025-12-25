@@ -3,14 +3,29 @@ package dev.tonimatas.fastregions.region;
 import dev.tonimatas.fastregions.util.PermissionUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 
 public class RegionEvents {
-    public static boolean cancelGenericEvent(Level level, BlockPos pos, RegionFlag flag) {
-        return cancelGenericEvent(null, level, pos, flag);
+    public static boolean cancelGenericEvent(BlockGetter level, BlockPos pos, RegionFlag flag) {
+        if (level instanceof ServerLevel serverLevel) {
+            return cancelGenericEvent(null, serverLevel, pos, flag);
+        }
+
+        return false;
+    }
+
+    public static boolean cancelGenericEvent(LevelReader level, BlockPos pos, RegionFlag flag) {
+        if (level instanceof ServerLevel serverLevel) {
+            return cancelGenericEvent(null, serverLevel, pos, flag);
+        }
+        
+        return false;
     }
 
     public static boolean cancelGenericEvent(Entity entity, Level level, BlockPos pos, RegionFlag flag) {
