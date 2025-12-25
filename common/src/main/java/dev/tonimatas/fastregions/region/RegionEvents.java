@@ -10,12 +10,22 @@ import net.minecraft.world.level.block.Block;
 
 public class RegionEvents {
     public static boolean cancelGenericEvent(Level level, BlockPos pos, RegionFlag flag) {
+        return cancelGenericEvent(null, level, pos, flag);
+    }
+
+    public static boolean cancelGenericEvent(Entity entity, Level level, BlockPos pos, RegionFlag flag) {
         if (level.isClientSide()) return false;
 
         Region result = RegionManager.getRegion(level, pos);
 
         if (result != null) {
-            return result.has(flag);
+            if (result.hasFlagWithAllowedList(flag, "")) {
+                if (entity instanceof Player player) {
+                    return !PermissionUtils.hasRegionBypass(player, result.getName());
+                } else {
+                    return true;
+                }
+            }
         }
 
         return false;

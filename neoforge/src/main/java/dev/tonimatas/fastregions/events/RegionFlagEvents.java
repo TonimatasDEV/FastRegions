@@ -4,7 +4,10 @@ import dev.tonimatas.fastregions.FastRegions;
 import dev.tonimatas.fastregions.region.RegionEvents;
 import dev.tonimatas.fastregions.region.RegionFlag;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.PlayerRideable;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -39,6 +42,18 @@ public class RegionFlagEvents {
         if (cancel) {
             event.setUseBlock(TriState.FALSE);
             event.setCancellationResult(InteractionResult.FAIL);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onBlockInteract(PlayerInteractEvent.EntityInteract event) {
+        if (event.getTarget() instanceof VehicleEntity) {
+            event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.VEHICLE_INTERACT));
+            return;
+        }
+
+        if (event.getTarget() instanceof PlayerRideable) {
+            event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.RIDE_ENTITY));
         }
     }
 

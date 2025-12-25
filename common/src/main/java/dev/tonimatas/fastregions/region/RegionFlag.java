@@ -20,7 +20,10 @@ public enum RegionFlag {
     EXPLOSION,
     ENTITY_DAMAGE(AllowedListTypes.ENTITIES),
     USE_ITEMS(AllowedListTypes.ITEMS), // TODO
-    LIGHTNING_BOLTS;
+    LIGHTNING_BOLTS,
+    VEHICLE_INTERACT, // TODO: AllowList?
+    RIDE_ENTITY, // TODO: AllowList?
+    VEHICLE_DESTROY; // TODO: AllowList?
 
     private final AllowedListTypes allowedListType;
 
