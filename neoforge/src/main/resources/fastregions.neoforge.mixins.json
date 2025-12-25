@@ -4,6 +4,9 @@
   "package": "dev.tonimatas.fastregions.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "DripleafMixin",
+    "ItemFrameMixin",
+    "BlockAttachedEntityMixin",
     "ServerLevelMixin",
     "VehicleEntityMixin"
   ],

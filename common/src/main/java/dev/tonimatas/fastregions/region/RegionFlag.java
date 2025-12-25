@@ -21,6 +21,10 @@ public enum RegionFlag {
     ENTITY_DAMAGE(AllowedListTypes.ENTITIES),
     USE_ITEMS(AllowedListTypes.ITEMS), // TODO
     LIGHTNING_BOLTS,
+    TOUCH_DRIPLEAF,
+    ROTATE_ITEM_FRAME,
+    DESTROY_ITEM_FRAME,
+    DESTROY_PAINTING,
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?
     VEHICLE_DESTROY; // TODO: AllowList?
