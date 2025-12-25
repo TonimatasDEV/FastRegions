@@ -9,6 +9,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 public class RegionEvents {
+    public static boolean cancelGenericEvent(Level level, BlockPos pos, RegionFlag flag) {
+        if (level.isClientSide()) return false;
+
+        Region result = RegionManager.getRegion(level, pos);
+
+        if (result != null) {
+            return result.has(flag);
+        }
+
+        return false;
+    }
+    
     public static boolean cancelBlockEvent(Entity entity, Level level, BlockPos pos, RegionFlag flag) {
         if (level.isClientSide()) return false;
 

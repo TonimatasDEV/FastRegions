@@ -19,7 +19,8 @@ public enum RegionFlag {
     PVP,
     EXPLOSION,
     ENTITY_DAMAGE(AllowedListTypes.ENTITIES),
-    USE_ITEMS(AllowedListTypes.ITEMS); // TODO
+    USE_ITEMS(AllowedListTypes.ITEMS), // TODO
+    LIGHTNING_BOLTS;
 
     private final AllowedListTypes allowedListType;
 

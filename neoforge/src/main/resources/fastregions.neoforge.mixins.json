@@ -4,6 +4,7 @@
   "package": "dev.tonimatas.fastregions.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ServerLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
