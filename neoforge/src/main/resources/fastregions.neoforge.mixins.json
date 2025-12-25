@@ -4,13 +4,17 @@
   "package": "dev.tonimatas.fastregions.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BiomeMixin",
     "BlockAttachedEntityMixin",
     "DripleafMixin",
     "ItemFrameMixin",
     "LeavesBlockMixin",
     "ServerLevelMixin",
+    "SnowGolemMixin",
+    "SnowLayerBlockMixin",
     "SpreadingSnowyDirtBlockMixin",
-    "VehicleEntityMixin"
+    "VehicleEntityMixin",
+    "VineBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

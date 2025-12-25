@@ -28,6 +28,11 @@ public enum RegionFlag {
     LEAF_DECAY,
     GRASS_SPREAD,
     MYCELIUM_SPREAD,
+    CROP_GROWTH, // TODO: AllowList?
+    VINE_GROWTH,
+    SNOW_MELT,
+    SNOW_FALL,
+    SNOWGOLEM_TRAILS,
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?
     VEHICLE_DESTROY; // TODO: AllowList?
