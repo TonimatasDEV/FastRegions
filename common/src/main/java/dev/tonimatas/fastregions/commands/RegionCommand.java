@@ -84,7 +84,7 @@ public class RegionCommand {
         ServerPlayer player = source.getPlayer();
 
         if (player != null) {
-            BlockPos pos = player.getOnPos();
+            BlockPos pos = player.blockPosition();
             POS1.put(player.getName().getString(), pos);
             source.sendSuccess(() -> Component.translatable("key.fastregions.pos.success", 1, pos.getX(), pos.getY(), pos.getZ()), false);
             return 1;
@@ -99,7 +99,7 @@ public class RegionCommand {
         ServerPlayer player = source.getPlayer();
 
         if (player != null) {
-            BlockPos pos = player.getOnPos();
+            BlockPos pos = player.blockPosition();
             POS2.put(player.getName().getString(), pos);
             source.sendSuccess(() -> Component.translatable("key.fastregions.pos.success", 2, pos.getX(), pos.getY(), pos.getZ()), false);
             return 1;
