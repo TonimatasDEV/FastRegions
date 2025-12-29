@@ -19,7 +19,7 @@ public enum RegionFlag {
     PVP,
     EXPLOSION,
     ENTITY_DAMAGE(AllowedListTypes.ENTITIES),
-    USE_ITEMS(AllowedListTypes.ITEMS), // TODO
+    USE_ITEMS(AllowedListTypes.ITEMS), // TODO: Implement
     LIGHTNING_BOLTS,
     TOUCH_DRIPLEAF,
     ROTATE_ITEM_FRAME,
@@ -36,7 +36,11 @@ public enum RegionFlag {
     ICE_MELT,
     FROSTED_ICE_FORM,
     FROSTED_ICE_MELT,
+    FLOWING_FLUIDS, // TODO: AllowList
     SNOWGOLEM_TRAILS,
+    ITEM_PICKUP, // TODO: AllowList?
+    FIREWORK_DAMAGE,
+    WITHER_DAMAGE, // TODO: EFFECT_DAMAGE with AllowList?
     CORAL_DIE,
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?

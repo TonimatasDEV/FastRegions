@@ -70,7 +70,7 @@ public class RegionEvents {
         Level level = receiver.level();
         if (level.isClientSide()) return false;
 
-        Region result = RegionManager.getRegion(level, receiver.getOnPos());
+        Region result = RegionManager.getRegion(level, receiver.blockPosition());
         String entityId = BuiltInRegistries.ENTITY_TYPE.getKey(receiver.getType()).toString();
 
         if (result != null) {

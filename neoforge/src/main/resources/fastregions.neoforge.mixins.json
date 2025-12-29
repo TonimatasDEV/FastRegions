@@ -9,6 +9,7 @@
     "BlockAttachedEntityMixin",
     "CoralBlockMixin",
     "DripleafMixin",
+    "FlowingFluidMixin",
     "FrostedIceBlockMixin",
     "IceBlockMixin",
     "ItemFrameMixin",

@@ -4,6 +4,7 @@ import dev.tonimatas.fastregions.FastRegions;
 import dev.tonimatas.fastregions.region.RegionEvents;
 import dev.tonimatas.fastregions.region.RegionFlag;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.PlayerRideable;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -16,6 +17,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
@@ -51,11 +53,11 @@ public class RegionFlagEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlockInteract(PlayerInteractEvent.EntityInteract event) {
         switch (event.getTarget()) {
-            case VehicleEntity vehicle -> 
+            case VehicleEntity ignored -> 
                     event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.VEHICLE_INTERACT));
-            case PlayerRideable playerRideable ->
+            case PlayerRideable ignored ->
                 event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.RIDE_ENTITY));
-            case ItemFrame itemFrame ->
+            case ItemFrame ignored ->
                     event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.ROTATE_ITEM_FRAME));
             default -> {
             }
@@ -64,8 +66,16 @@ public class RegionFlagEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
+        if (event.getSource().is(DamageTypes.WITHER) || event.getSource().is(DamageTypes.WITHER_SKULL)) {
+            event.setCanceled(RegionEvents.cancelEntityToEntityEvent(null, event.getEntity(), RegionFlag.WITHER_DAMAGE));
+        }
+        
+        if (!event.isCanceled() && event.getSource().is(DamageTypes.FIREWORKS)) {
+            event.setCanceled(RegionEvents.cancelEntityToEntityEvent(null, event.getEntity(), RegionFlag.FIREWORK_DAMAGE));
+        }
+        
         if (event.getEntity() instanceof Player player) {
-            if (event.getSource().getEntity() instanceof Player attacker) {
+            if (!event.isCanceled() && event.getSource().getEntity() instanceof Player attacker) {
                 event.setCanceled(RegionEvents.cancelEntityToEntityEvent(attacker, player, RegionFlag.PVP));
             }
 
@@ -95,6 +105,13 @@ public class RegionFlagEvents {
     public static void onMobGrief(EntityMobGriefingEvent event) {
         if (event.getEntity() instanceof SnowGolem) {
             event.setCanGrief(RegionEvents.cancelGenericEvent(event.getEntity().level(), event.getEntity().blockPosition(), RegionFlag.SNOWGOLEM_TRAILS));
+        }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onPickup(ItemEntityPickupEvent.Pre event) {
+        if (RegionEvents.cancelGenericEvent(event.getItemEntity().level(), event.getItemEntity().blockPosition(), RegionFlag.ITEM_PICKUP)) {
+            event.setCanPickup(TriState.FALSE);
         }
     }
 }
