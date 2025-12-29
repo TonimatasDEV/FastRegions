@@ -6,7 +6,6 @@ import dev.tonimatas.fastregions.region.RegionFlag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.PlayerRideable;
-import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
@@ -15,7 +14,6 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
-import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -98,13 +96,6 @@ public class RegionFlagEvents {
     public static void onCropGrowth(CropGrowEvent.Pre event) {
         if (RegionEvents.cancelGenericEvent(event.getLevel(), event.getPos(), RegionFlag.CROP_GROWTH)) {
             event.setResult(CropGrowEvent.Pre.Result.DO_NOT_GROW);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onMobGrief(EntityMobGriefingEvent event) {
-        if (event.getEntity() instanceof SnowGolem) {
-            event.setCanGrief(RegionEvents.cancelGenericEvent(event.getEntity().level(), event.getEntity().blockPosition(), RegionFlag.SNOWGOLEM_TRAILS));
         }
     }
     
