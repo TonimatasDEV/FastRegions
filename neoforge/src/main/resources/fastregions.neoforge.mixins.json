@@ -16,6 +16,7 @@
     "ItemFrameMixin",
     "LavaFluidMixin",
     "LeavesBlockMixin",
+    "RavagerMixin",
     "ReplaceDiskMixin",
     "ServerLevelMixin",
     "SnowGolemMixin",

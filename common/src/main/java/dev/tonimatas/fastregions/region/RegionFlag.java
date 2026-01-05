@@ -40,6 +40,7 @@ public enum RegionFlag {
     SNOWGOLEM_TRAILS,
     ITEM_PICKUP, // TODO: AllowList?
     FIREWORK_DAMAGE,
+    RAVAGER_GRIEF,
     FIRE_TICK,
     LAVA_FIRE,
     WITHER_DAMAGE, // TODO: EFFECT_DAMAGE with AllowList?
