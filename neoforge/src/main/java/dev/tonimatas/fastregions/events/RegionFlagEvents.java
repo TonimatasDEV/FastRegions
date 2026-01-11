@@ -9,10 +9,12 @@ import net.minecraft.world.entity.PlayerRideable;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -117,5 +119,10 @@ public class RegionFlagEvents {
         if (event.getFeature().is(TreeFeatures.HUGE_BROWN_MUSHROOM) || event.getFeature().is(TreeFeatures.HUGE_RED_MUSHROOM)) {
             event.setCanceled(CallFlag.mushroomGrowth(event.getLevel(), event.getPos()));
         }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onUseItem(LivingEntityUseItemEvent.Start event) {
+        event.setCanceled(CallFlag.useItems(event.getEntity()));
     }
 }

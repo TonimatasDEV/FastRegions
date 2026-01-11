@@ -71,6 +71,18 @@ public class CallFlag {
     public static boolean fallDamage(Player player) {
         return RegionEvents.cancelEntityEvent(player, player.level(), player.blockPosition(), RegionFlag.FALL_DAMAGE);
     }
+
+    public static boolean dripstoneGrowth(Level level, BlockPos blockPos) {
+        return RegionEvents.cancelGenericEvent(level, blockPos, RegionFlag.DRIPSTONE_GROWTH);
+    }
+
+    public static boolean useEnderPearl(Entity entity) {
+        return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.USE_ENDER_PEARL);
+    }
+
+    public static boolean useItems(Entity entity) {
+        return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.USE_ITEMS);
+    }
     
     // TODO: Remaining flags
 }

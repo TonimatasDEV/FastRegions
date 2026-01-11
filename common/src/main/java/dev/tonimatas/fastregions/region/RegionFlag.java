@@ -19,7 +19,7 @@ public enum RegionFlag {
     PVP,
     EXPLOSION,
     ENTITY_DAMAGE(AllowedListTypes.ENTITIES),
-    USE_ITEMS(AllowedListTypes.ITEMS), // TODO: Implement
+    USE_ITEMS(AllowedListTypes.ITEMS),
     LIGHTNING_BOLTS,
     TOUCH_DRIPLEAF,
     ROTATE_ITEM_FRAME,
@@ -49,7 +49,9 @@ public enum RegionFlag {
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?
     VEHICLE_DESTROY, // TODO: AllowList?
-    FALL_DAMAGE; 
+    FALL_DAMAGE,
+    DRIPSTONE_GROWTH,
+    USE_ENDER_PEARL;
 
     private final AllowedListTypes allowedListType;
 
