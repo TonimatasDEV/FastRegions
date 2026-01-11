@@ -1,8 +1,7 @@
 package dev.tonimatas.fastregions.events;
 
 import dev.tonimatas.fastregions.FastRegions;
-import dev.tonimatas.fastregions.region.RegionEvents;
-import dev.tonimatas.fastregions.region.RegionFlag;
+import dev.tonimatas.fastregions.region.CallFlag;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -10,7 +9,6 @@ import net.minecraft.world.entity.PlayerRideable;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -27,22 +25,22 @@ import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 public class RegionFlagEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        event.setCanceled(RegionEvents.cancelBlockEvent(event.getPlayer(), event.getPlayer().level(), event.getPos(), RegionFlag.BLOCK_BREAK));
+        event.setCanceled(CallFlag.blockBreak(event.getPlayer(), event.getPos()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
-        event.setCanceled(RegionEvents.cancelBlockEvent(event.getEntity(), (Level) event.getLevel(), event.getPos(), RegionFlag.BLOCK_PLACE));
+        event.setCanceled(CallFlag.blockPlace(event.getEntity(), event.getPos()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onMultiPlaceBlock(BlockEvent.EntityMultiPlaceEvent event) {
-        event.setCanceled(RegionEvents.cancelBlockEvent(event.getEntity(), (Level) event.getLevel(), event.getPos(), RegionFlag.BLOCK_PLACE));
+        event.setCanceled(CallFlag.blockPlace(event.getEntity(), event.getPos()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBlockInteract(PlayerInteractEvent.RightClickBlock event) {
-        boolean cancel = RegionEvents.cancelBlockEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.BLOCK_INTERACT);
+        boolean cancel = CallFlag.blockInteract(event.getEntity(), event.getPos());
         
         if (cancel) {
             event.setUseBlock(TriState.FALSE);
@@ -54,11 +52,11 @@ public class RegionFlagEvents {
     public static void onBlockInteract(PlayerInteractEvent.EntityInteract event) {
         switch (event.getTarget()) {
             case VehicleEntity ignored -> 
-                    event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.VEHICLE_INTERACT));
+                    event.setCanceled(CallFlag.vehicleInteract(event.getEntity(), event.getPos()));
             case PlayerRideable ignored ->
-                event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.RIDE_ENTITY));
+                event.setCanceled(CallFlag.rideEntity(event.getEntity(), event.getPos()));
             case ItemFrame ignored ->
-                    event.setCanceled(RegionEvents.cancelGenericEvent(event.getEntity(), event.getLevel(), event.getPos(), RegionFlag.ROTATE_ITEM_FRAME));
+                    event.setCanceled(CallFlag.rotateItemFrame(event.getEntity(), event.getPos()));
             default -> {
             }
         }
@@ -67,43 +65,43 @@ public class RegionFlagEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
         if (event.getSource().is(DamageTypes.WITHER) || event.getSource().is(DamageTypes.WITHER_SKULL)) {
-            event.setCanceled(RegionEvents.cancelEntityToEntityEvent(null, event.getEntity(), RegionFlag.WITHER_DAMAGE));
+            event.setCanceled(CallFlag.witherDamage(event.getEntity()));
         }
         
         if (!event.isCanceled() && event.getSource().is(DamageTypes.FIREWORKS)) {
-            event.setCanceled(RegionEvents.cancelEntityToEntityEvent(null, event.getEntity(), RegionFlag.FIREWORK_DAMAGE));
+            event.setCanceled(CallFlag.fireworkDamage(event.getEntity()));
         }
         
         if (event.getEntity() instanceof Player player) {
             if (!event.isCanceled() && event.getSource().getEntity() instanceof Player attacker) {
-                event.setCanceled(RegionEvents.cancelEntityToEntityEvent(attacker, player, RegionFlag.PVP));
+                event.setCanceled(CallFlag.pvp(attacker, player));
             }
 
             if (!event.isCanceled()) {
-                event.setCanceled(RegionEvents.cancelEntityEvent(player, player.level(), player.getOnPos(), RegionFlag.INVINCIBLE_PLAYERS));
+                event.setCanceled(CallFlag.invinciblePlayers(player));
             }
         }
 
         if (!event.isCanceled() && event.getSource().getEntity() != null) {
-            event.setCanceled(RegionEvents.cancelEntityToEntityEvent(event.getSource().getEntity(), event.getEntity(), RegionFlag.ENTITY_DAMAGE));
+            event.setCanceled(CallFlag.entityDamage(event.getSource().getEntity(), event.getEntity()));
         }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
-        event.getAffectedBlocks().removeIf(toBlow -> RegionEvents.cancelBlockEvent(null, event.getLevel(), toBlow, RegionFlag.EXPLOSION));
+        event.getAffectedBlocks().removeIf(toBlow -> CallFlag.explosion(event.getLevel(), toBlow));
     }
     
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onCropGrowth(CropGrowEvent.Pre event) {
-        if (RegionEvents.cancelGenericEvent(event.getLevel(), event.getPos(), RegionFlag.CROP_GROWTH)) {
+        if (CallFlag.cropGrowth(event.getLevel(), event.getPos())) {
             event.setResult(CropGrowEvent.Pre.Result.DO_NOT_GROW);
         }
     }
     
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPickup(ItemEntityPickupEvent.Pre event) {
-        if (RegionEvents.cancelGenericEvent(event.getItemEntity().level(), event.getItemEntity().blockPosition(), RegionFlag.ITEM_PICKUP)) {
+        if (CallFlag.itemPickup(event.getItemEntity())) {
             event.setCanPickup(TriState.FALSE);
         }
     }
@@ -113,7 +111,7 @@ public class RegionFlagEvents {
         if (event.getFeature() == null) return;
         
         if (event.getFeature().is(TreeFeatures.HUGE_BROWN_MUSHROOM) || event.getFeature().is(TreeFeatures.HUGE_RED_MUSHROOM)) {
-            event.setCanceled(RegionEvents.cancelGenericEvent(event.getLevel(), event.getPos(), RegionFlag.MUSHROOM_GROWTH));
+            event.setCanceled(CallFlag.mushroomGrowth(event.getLevel(), event.getPos()));
         }
     }
 }
