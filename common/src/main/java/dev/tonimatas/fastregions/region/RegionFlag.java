@@ -48,7 +48,8 @@ public enum RegionFlag {
     CORAL_DIE,
     VEHICLE_INTERACT, // TODO: AllowList?
     RIDE_ENTITY, // TODO: AllowList?
-    VEHICLE_DESTROY; // TODO: AllowList?
+    VEHICLE_DESTROY, // TODO: AllowList?
+    FALL_DAMAGE; 
 
     private final AllowedListTypes allowedListType;
 

@@ -77,6 +77,10 @@ public class RegionFlagEvents {
                 event.setCanceled(CallFlag.pvp(attacker, player));
             }
 
+            if (!event.isCanceled() && event.getSource().is(DamageTypes.FALL)) {
+                event.setCanceled(CallFlag.fallDamage(player));
+            }
+
             if (!event.isCanceled()) {
                 event.setCanceled(CallFlag.invinciblePlayers(player));
             }

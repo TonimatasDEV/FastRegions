@@ -67,6 +67,10 @@ public class CallFlag {
     public static boolean mushroomGrowth(LevelAccessor level, BlockPos blockPos) {
         return RegionEvents.cancelGenericEvent(level, blockPos, RegionFlag.MUSHROOM_GROWTH);
     }
+
+    public static boolean fallDamage(Player player) {
+        return RegionEvents.cancelEntityEvent(player, player.level(), player.blockPosition(), RegionFlag.FALL_DAMAGE);
+    }
     
     // TODO: Remaining flags
 }
