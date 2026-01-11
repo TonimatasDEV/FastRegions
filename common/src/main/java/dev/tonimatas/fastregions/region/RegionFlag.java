@@ -34,6 +34,7 @@ public enum RegionFlag {
     SNOW_FALL,
     ICE_FORM,
     ICE_MELT,
+    MUSHROOM_GROWTH,
     FROSTED_ICE_FORM,
     FROSTED_ICE_MELT,
     FLOWING_FLUIDS, // TODO: AllowList

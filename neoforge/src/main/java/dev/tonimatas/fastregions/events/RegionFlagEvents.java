@@ -3,6 +3,7 @@ package dev.tonimatas.fastregions.events;
 import dev.tonimatas.fastregions.FastRegions;
 import dev.tonimatas.fastregions.region.RegionEvents;
 import dev.tonimatas.fastregions.region.RegionFlag;
+import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.PlayerRideable;
@@ -18,6 +19,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.BlockGrowFeatureEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.block.CropGrowEvent;
 
@@ -103,6 +105,15 @@ public class RegionFlagEvents {
     public static void onPickup(ItemEntityPickupEvent.Pre event) {
         if (RegionEvents.cancelGenericEvent(event.getItemEntity().level(), event.getItemEntity().blockPosition(), RegionFlag.ITEM_PICKUP)) {
             event.setCanPickup(TriState.FALSE);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onFeatureGrow(BlockGrowFeatureEvent event) {
+        if (event.getFeature() == null) return;
+        
+        if (event.getFeature().is(TreeFeatures.HUGE_BROWN_MUSHROOM) || event.getFeature().is(TreeFeatures.HUGE_RED_MUSHROOM)) {
+            event.setCanceled(RegionEvents.cancelGenericEvent(event.getLevel(), event.getPos(), RegionFlag.MUSHROOM_GROWTH));
         }
     }
 }
