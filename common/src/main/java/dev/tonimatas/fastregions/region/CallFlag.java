@@ -92,6 +92,10 @@ public class CallFlag {
     public static boolean entityExpDrop(Entity entity) {
         return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ENTITY_EXPERIENCE_DROPS);
     }
+
+    public static boolean dropItem(Player entity) {
+        return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ITEM_DROP);
+    }
     
     // TODO: Remaining flags
 }

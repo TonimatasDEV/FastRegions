@@ -20,6 +20,7 @@
     "PointedDripstoneBlockMixin",
     "RavagerMixin",
     "ReplaceDiskMixin",
+    "ServerGamePacketListenerImplMixin",
     "ServerLevelMixin",
     "SnowGolemMixin",
     "SnowLayerBlockMixin",
