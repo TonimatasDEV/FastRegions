@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -80,7 +81,7 @@ public class CallFlag {
         return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.USE_ENDER_PEARL);
     }
 
-    public static boolean useItems(Entity entity) {
+    public static boolean useItems(Entity entity, Item item) {
         return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.USE_ITEMS);
     }
     

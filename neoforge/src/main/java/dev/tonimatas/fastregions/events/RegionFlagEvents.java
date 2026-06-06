@@ -9,7 +9,6 @@ import net.minecraft.world.entity.PlayerRideable;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
-import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -123,6 +122,6 @@ public class RegionFlagEvents {
     
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onUseItem(LivingEntityUseItemEvent.Start event) {
-        event.setCanceled(CallFlag.useItems(event.getEntity()));
+        event.setCanceled(CallFlag.useItems(event.getEntity(), event.getItem().getItem()));
     }
 }
