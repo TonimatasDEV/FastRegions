@@ -1,15 +1,17 @@
 package dev.tonimatas.fastregions.region.allowlist;
 
-import dev.tonimatas.fastregions.platform.Services;
 import dev.tonimatas.fastregions.region.Region;
 import dev.tonimatas.fastregions.region.RegionFlag;
+import dev.tonimatas.fastregions.region.allowlist.impl.BlocksExtension;
+import dev.tonimatas.fastregions.region.allowlist.impl.EntitiesExtension;
+import dev.tonimatas.fastregions.region.allowlist.impl.ItemsExtension;
 
 import java.util.List;
 
 public enum AllowedListTypes {
-    BLOCKS(Services.EXTENSION.blocks()),
-    ENTITIES(Services.EXTENSION.entities()),
-    ITEMS(Services.EXTENSION.items());
+    BLOCKS(new BlocksExtension()),
+    ENTITIES(new EntitiesExtension()),
+    ITEMS(new ItemsExtension());
 
     private final AllowedListExtension extension;
 
