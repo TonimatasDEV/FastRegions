@@ -13,7 +13,9 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -123,5 +125,15 @@ public class RegionFlagEvents {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onUseItem(LivingEntityUseItemEvent.Start event) {
         event.setCanceled(CallFlag.useItems(event.getEntity(), event.getItem().getItem()));
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onLivingDrop(LivingDropsEvent event) {
+        event.setCanceled(CallFlag.entityItemDrops(event.getEntity()));
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onLivingDrop(LivingExperienceDropEvent event) {
+        event.setCanceled(CallFlag.entityExpDrop(event.getEntity()));
     }
 }

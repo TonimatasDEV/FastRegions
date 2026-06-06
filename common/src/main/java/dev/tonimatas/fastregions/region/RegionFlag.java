@@ -51,7 +51,10 @@ public enum RegionFlag {
     VEHICLE_DESTROY, // TODO: AllowList?
     FALL_DAMAGE,
     DRIPSTONE_GROWTH,
-    USE_ENDER_PEARL;
+    USE_ENDER_PEARL,
+    ITEM_DROP,
+    ENTITY_ITEM_DROPS,
+    ENTITY_EXPERIENCE_DROPS;
 
     private final AllowedListTypes allowedListType;
 

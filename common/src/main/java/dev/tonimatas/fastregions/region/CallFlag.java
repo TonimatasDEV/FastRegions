@@ -84,6 +84,14 @@ public class CallFlag {
     public static boolean useItems(Entity entity, Item item) {
         return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.USE_ITEMS);
     }
+
+    public static boolean entityItemDrops(Entity entity) {
+        return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ENTITY_ITEM_DROPS);
+    }
+
+    public static boolean entityExpDrop(Entity entity) {
+        return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ENTITY_EXPERIENCE_DROPS);
+    }
     
     // TODO: Remaining flags
 }
