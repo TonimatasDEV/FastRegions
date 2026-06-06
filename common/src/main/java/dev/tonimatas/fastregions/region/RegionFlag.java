@@ -52,9 +52,9 @@ public enum RegionFlag {
     FALL_DAMAGE,
     DRIPSTONE_GROWTH,
     USE_ENDER_PEARL,
-    ITEM_DROP,
-    ENTITY_ITEM_DROPS,
-    ENTITY_EXPERIENCE_DROPS;
+    ITEM_DROP, // TODO: AllowList?
+    ENTITY_ITEM_DROPS, // TODO: AllowList?
+    ENTITY_EXPERIENCE_DROPS; // TODO: AllowList?
 
     private final AllowedListTypes allowedListType;
 
