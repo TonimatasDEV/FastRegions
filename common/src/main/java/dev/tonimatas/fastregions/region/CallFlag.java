@@ -1,6 +1,7 @@
 package dev.tonimatas.fastregions.region;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -104,6 +105,14 @@ public class CallFlag {
 
     public static boolean endermanGrief(EnderMan entity) {
         return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ENDERMAN_GRIEF);
+    }
+
+    public static boolean copperOxidation(ServerLevel level, BlockPos blockPos) {
+        return RegionEvents.cancelGenericEvent(level, blockPos, RegionFlag.COPPER_OXIDATION);
+    }
+
+    public static boolean copperModification(Level level, BlockPos blockPos) {
+        return RegionEvents.cancelGenericEvent(level, blockPos, RegionFlag.COPPER_MODIFICATION);
     }
     // TODO: Remaining flags
 }
