@@ -10,6 +10,8 @@
     "BoatItemMixin",
     "CoralBlockMixin",
     "DripleafMixin",
+    "EnderMan$EndermanLeaveBlockGoal",
+    "EnderMan$EndermanTakeBlockGoal",
     "EnderpearlItemMixin",
     "FireBlockMixin",
     "FlowingFluidMixin",

@@ -55,7 +55,8 @@ public enum RegionFlag {
     ITEM_DROP, // TODO: AllowList?
     ENTITY_ITEM_DROPS, // TODO: AllowList?
     ENTITY_EXPERIENCE_DROPS, // TODO: AllowList?
-    VEHICLE_PLACE;
+    VEHICLE_PLACE,
+    ENDERMAN_GRIEF;
 
     private final AllowedListTypes allowedListType;
 

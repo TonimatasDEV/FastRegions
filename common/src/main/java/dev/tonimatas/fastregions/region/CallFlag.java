@@ -3,6 +3,7 @@ package dev.tonimatas.fastregions.region;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -99,6 +100,10 @@ public class CallFlag {
 
     public static boolean vehiclePlace(Player player, Entity entity) {
         return RegionEvents.cancelEntityEvent(player, entity.level(), entity.blockPosition(), RegionFlag.VEHICLE_PLACE);
+    }
+
+    public static boolean endermanGrief(EnderMan entity) {
+        return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ENDERMAN_GRIEF);
     }
     // TODO: Remaining flags
 }
