@@ -96,6 +96,9 @@ public class CallFlag {
     public static boolean dropItem(Player entity) {
         return RegionEvents.cancelGenericEvent(entity, entity.level(), entity.blockPosition(), RegionFlag.ITEM_DROP);
     }
-    
+
+    public static boolean vehiclePlace(Player player, Entity entity) {
+        return RegionEvents.cancelEntityEvent(player, entity.level(), entity.blockPosition(), RegionFlag.VEHICLE_PLACE);
+    }
     // TODO: Remaining flags
 }
